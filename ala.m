@@ -1,4 +1,4 @@
-function[ E, V ] = ala (d_q, t_q, c_q, phi_q, b_q)
+function[ CL, CD ] = ala (d_q, t_q, c_q, phi_q, b_q)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ALA calcula las propiedades del ala a partir de la geometria
@@ -97,15 +97,9 @@ Mach = state.AS/a;
 
 %Calculo de CL y CD (inducida)
 Alpha = [alpha0, d_alpha, alphaf];
-[CL_, CD_] = solverloop5(results, state, geo, Alpha);
+[CL, CD] = solverloop5(results, state, geo, Alpha);
 
 %Calculo de la resistencia total
-CD_ = CD_ + sum(CD0_wing);
-
-V = sum(results.Vol(2:end));   %Volumen del winglet
-E = max(CL_./CD_);             %Eficiencia maxima
-
-%% Plots
-geometryplot(lattice, geo, ref);
+CD = CD + sum(CD0_wing);
 
 end function
