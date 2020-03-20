@@ -1,3 +1,0 @@
-global NPANELES;
-
-NPANELES = 200;

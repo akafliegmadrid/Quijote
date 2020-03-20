@@ -1,4 +1,4 @@
-function [ x, y ] = BP3434( rle, xt, yt, bte, dzte, yle,...
+function [ x, y ] = BP3434( npaneles, rle, xt, yt, bte, dzte, yle,...
                             xc, yc, ate, zte, b0, b2, b8, b15, b17 )
 % BP3434 calcula 'n' nodos a lo largo del perfil a partir de 15 parametros
 %   Basado en el articulo:
@@ -8,11 +8,8 @@ function [ x, y ] = BP3434( rle, xt, yt, bte, dzte, yle,...
 %   Participantes:
 %       - Andres Mateo Gabin
 
-% Parametros globales
-global NPANELES;
-
 % Si cada seccion se lleva la mitad de los puntos
-t = linspace(0.0, 1.0, NPANELES/2);
+t = linspace(0.0, 1.0, floor(npaneles/2));
 
 % Vectores con los puntos de control
 xc3 = zeros(4, 1);
@@ -26,7 +23,7 @@ xc3(1) = 0.0;
 yc3(1) = 0.0;
 xc3(2) = 0.0;
 yc3(2) = b8;
-xc3(3) = -3.0 * b8^2 / (2.0 * rle);
+xc3(3) = 3.0 * b8^2 / (2.0 * rle);
 yc3(3) = yt;
 xc3(4) = xt;
 yc3(4) = yt;
@@ -47,8 +44,8 @@ yc3(4) = yc;
 
 % Posicion de los nodos (equiespaciados)
 % Hay que buscar las 'tt' que dan los mismos valores de x que antes
-tt  = fsolve(@(t) bezier(t, xc3, yc3) - xlt, xlt);
-[xlc, ylc] = bezier(tt,xc3, yc3);
+tt = fsolve(@(t) bezier(t, xc3, yc3) - xlt, xlt);
+[xlc, ylc] = bezier(tt, xc3, yc3);
 
 % Espesor (borde de salida)
 % Puntos de control
@@ -83,5 +80,15 @@ yc4(5) = zte;
 % Hay que buscar las 'tt' que dan los mismos valores de x que antes
 tt = fsolve(@(t) bezier(t, xc4, yc4) - xtt, xtt);
 [xtc, ytc] = bezier(tt, xc4, yc4);
+
+% Definicion de las cuatro partes del perfil (sentido horario)
+xlu = xlc;                   ylu = ylc + ylt;
+xtu = xtc(2:end);            ytu = ytc(2:end) + ytt(2:end);
+xtd = fliplr(xtc(1:end-1));  ytd = fliplr(ytc(1:end-1) - ytt(1:end-1));
+xld = fliplr(xlc(2:end-1));  yld = fliplr(ylc(2:end-1) - ylt(2:end-1));
+
+% Y se concatenan los puntos para formar 'x' e 'y'
+x = [ xtd, xld, xlu, xtu ];
+y = [ ytd, yld, ylu, ytu ];
 
 end
