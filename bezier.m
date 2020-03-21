@@ -16,8 +16,8 @@ function [ x, y ] = bezier( t, xc, yc )
 p = length(xc)-1;
 
 % Calculo del polinomio
-x = zeros('like', t);
-y = zeros('like', t);
+x = zeros(size(t));
+y = zeros(size(t));
 for i = 0: p
     C = nchoosek(p,i);
     x = x + C * (1-t).^(p-i) .* t.^i * xc(i+1);
