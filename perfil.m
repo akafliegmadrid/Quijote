@@ -13,12 +13,12 @@ function [ Cl, Cd, Cm ] = perfil( npaneles, foilname, rle, xt, yt,  ...
 
 % Se escribe el archivo del perfil (tambien vale para el modulo del ala)
 fid = fopen(foilname, 'w');
-fprintf(fid,'%s\n', "Foil_1");
-fprintf(fid,'%9.5f   %9.5f\n', [x; y]');
+fprintf(fid, '%s\n', "Foil_1");
+fprintf(fid, '%9.5f   %9.5f\n', [x; y]);
 fclose(fid);
 
 % Llamada a Xfoil
-polar = xfoil(FOILNAME, alpha, Re, Ma);
+polar = xfoil(foilname, alpha, Re, Ma);
 
 % Valores de salida de la funcion
 Cl = polar.CL;
