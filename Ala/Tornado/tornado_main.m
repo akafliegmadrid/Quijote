@@ -54,7 +54,7 @@
 %   Bristol, 2007-06-27:  Addition of new header. TM
 %   Bristol, 2007-06-27:  Changed main to function. TM
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function main
+function tornado_main
 clear
 %splash                      %Display spash screen     
 clear

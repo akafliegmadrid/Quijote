@@ -1,3 +1,3 @@
 disp('- program start -')
-main
+tornado_main
 %diary off
