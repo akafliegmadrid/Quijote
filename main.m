@@ -13,8 +13,9 @@ clc
 %% PARAMETROS
 
 % Parametros de la simulacion
-n = 200;   % Numero de paneles en el perfil
-b = 20.0;  % Envergadura total en metros
+nPerfil  = 200;            % Numero de paneles en el perfil
+bAla     = 20.0;           % Envergadura total en metros
+foilName = "Airfoil.dat";  % Archivo con las coordenadas del perfil
 
 % Parametros del perfil (min, inicial, max)
 rle  = [ 0.05  0.1   0.15 ];  % [c^-1]
@@ -87,7 +88,7 @@ ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
 % Envergadura siempre igual a 'b'
 Aeq        = zeros(size(x0));
 Aeq(16:18) = 1.0;
-beq        = b/2.0;
+beq        = bAla/2.0;
 
 %% OPTIMIZACION
 
