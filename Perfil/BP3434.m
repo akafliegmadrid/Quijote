@@ -21,6 +21,9 @@ yc3 = zeros(4, 1);
 xc4 = zeros(5, 1);
 yc4 = zeros(5, 1);
 
+% Inicializacion de 'fsolve'
+options = optimoptions('fsolve', 'Display', 'off');
+
 %% Espesor (borde de ataque)
 % Puntos de control
 xc3(1) = 0.0;
@@ -72,7 +75,15 @@ yc3(4) = yc;
 % Posicion de los nodos (equiespaciados)
 xlc = xat(xat<xc);
 t0  = linspace(0.0, 1.0, length(xlc));
-tlc = fsolve(@(t) bezier(t, xc3, yc3) - xlc, t0);
+[tlc, ~, flag, ~] = fsolve(@(t) bezier(t, xc3, yc3) - xlc, t0, options);
+
+% Comprobar la convergencia
+if (flag < 1)
+    error([mfilename ':fsolve'], ['Fallo al calcular la curvatura', ...
+                                  ' en la parte frontal del perfil']);
+end
+
+% Si no hay errores...
 [~, ylc] = bezier(tlc, xc3, yc3);
 
 %% Curvatura (borde de salida)
@@ -92,7 +103,15 @@ yc4(5) = zte;
 % Posicion de los nodos (equiespaciados)
 xtc = xat(xat>=xc);
 t0  = linspace(0.0, 1.0, length(xtc));
-ttc = fsolve(@(t) bezier(t, xc4, yc4) - xtc, t0);
+[ttc, ~, flag, ~] = fsolve(@(t) bezier(t, xc4, yc4) - xtc, t0, options);
+
+% Comprobar la convergencia
+if (flag < 1)
+    error([mfilename ':fsolve'], ['Fallo al calcular la curvatura', ...
+                                  ' en la parte trasera del perfil']);
+end
+
+% Todo ha ido bien...
 [~, ytc] = bezier(ttc, xc4, yc4);
 
 %% Curvatura total

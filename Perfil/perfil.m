@@ -12,8 +12,9 @@ function [ Cl, Cd, Cm ] = perfil( npaneles, foilname, rle, xt, yt,  ...
                 ate, zte, b0, b2, b8, b15, b17);
 
 % Se escribe el archivo del perfil (tambien vale para el modulo del ala)
-fid = fopen(foilname, 'w');
-fprintf(fid, '%s\n', "Foil_1");
+wd  = fileparts(which(mfilename));
+fid = fopen([wd filesep 'Xfoil' filesep foilname], 'w');
+fprintf(fid, '%s\n', 'Foil_1');
 fprintf(fid, '%9.5f   %9.5f\n', [x; y]);
 fclose(fid);
 

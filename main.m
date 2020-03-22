@@ -16,9 +16,9 @@ clc
 Vinf       = 30.0;            % Velocidad de vuelo [m/s]
 Re         = 1e6;             % Numero de Reynolds del perfil
 h          = 1500;            % Altura de vuelo [m]
-alpha      = [-2.0 0.5 4.0];  % AoA (min, incremento, max) [deg]
+alpha      = [-2.0 0.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
 nPerfil    = 200;             % Numero de paneles en el perfil
-foilName   = "Airfoil.dat";   % Archivo con las coordenadas del perfil
+foilName   = 'Airfoil.dat';   % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
 nSecciones = 3;               % Numero de secciones del ala (quiebros + 1)
 nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
@@ -101,5 +101,5 @@ obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
 
 %% OPTIMIZACION
 
-geometry = fmincon(@funcion_objetivo, x0, [], [], Aeq, beq, ...
-                   lb, ub, [], @restriccionesNoLin, algorithmOptions);
+geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
+                   @restriccionesNoLin, algorithmOptions);

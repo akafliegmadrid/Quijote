@@ -5,7 +5,7 @@ function [ Aeq, beq ] = restriccionesLin ( b, in)
 %       - Andres Mateo Gabin
 
 % Numero de restricciones lineales: 1
-Aeq = zeros(1, size(in));
+Aeq = zeros(1, length(in));
 beq = zeros(1, 1);
 
 % Envergadura siempre igual a 'b'

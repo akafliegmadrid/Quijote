@@ -1,3 +1,6 @@
 Quijote*
 resources
 *.exe
+*.dat
+*.inp
+*.out
