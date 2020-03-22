@@ -4,4 +4,4 @@ function [ out ] = estructura( in )
 %   Participantes:
 %       - Andres Mateo Gabin
 
-end function
+end

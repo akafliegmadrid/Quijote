@@ -32,4 +32,4 @@ ts   = in(28:31);
 % Funcion objetivo
 %out = -CL^(3.0/2.0)/CD - CL/CD;
 
-end function
+end
