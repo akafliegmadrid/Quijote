@@ -13,9 +13,16 @@ clc
 %% PARAMETROS
 
 % Parametros de la simulacion
-nPerfil  = 200;            % Numero de paneles en el perfil
-bAla     = 20.0;           % Envergadura total en metros
-foilName = "Airfoil.dat";  % Archivo con las coordenadas del perfil
+Vinf       = 30.0;            % Velocidad de vuelo [m/s]
+Re         = 1e6;             % Numero de Reynolds del perfil
+h          = 1500;            % Altura de vuelo [m]
+alpha      = [-2.0 0.5 4.0];  % AoA (min, incremento, max) [deg]
+nPerfil    = 200;             % Numero de paneles en el perfil
+foilName   = "Airfoil.dat";   % Archivo con las coordenadas del perfil
+bAla       = 20.0;            % Envergadura total en metros
+nSecciones = 3;               % Numero de secciones del ala (quiebros + 1)
+nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
+nPanelY    = [40 20 10];      % No. de paneles en la direccion de la env.
 
 % Parametros del perfil (min, inicial, max)
 rle  = [ 0.05  0.1   0.15 ];  % [c^-1]
@@ -85,12 +92,14 @@ ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
       ate(3) zte(3) b0(3) b2(3) b8(3) b15(3) b17(3) bs(:,3)' ...
       cs(:,3)' fs(:,3)' ds(:,3)' ts(:,3)'];
 
-% Envergadura siempre igual a 'b'
-Aeq        = zeros(size(x0));
-Aeq(16:18) = 1.0;
-beq        = bAla/2.0;
+% Restricciones lineales
+[Aeq, beq] = restriccionesLin(bAla, x0);
+
+% Handle de la funcion objetivo
+obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
+                            nPanelY, Vinf, h, alpha, Re, x);
 
 %% OPTIMIZACION
 
 geometry = fmincon(@funcion_objetivo, x0, [], [], Aeq, beq, ...
-                   lb, ub, [], algorithmOptions);
+                   lb, ub, [], @restriccionesNoLin, algorithmOptions);
