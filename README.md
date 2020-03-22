@@ -1,6 +1,20 @@
 # Quijote
 Scripts para el diseño del MAD-1 "Rocinante"
 
+## Setup
+
+Es recomendable crear un proyecto de Matlab para mantener todos los
+archivos organizados
+<https://es.mathworks.com/help/matlab/matlab_prog/create-projects.html>,
+recordando añadir todas las carpetas al `PATH`.
+
+Para que `Xfoil` funcione es necesario que el archivo `xfoil.exe` este en
+la carpeta `Perfil/Xfoil`. Si teneis Linux o Mac podeis crear un enlace
+al ejecutable usando los comandos siguientes desde la carpeta `Xfoil`:
+
+* Para saber donde esta el ejecutable: `type xfoil`
+* Para crear el enlace: `ln -s /direccion/de/xfoil`
+
 ## Guía para usar git
 
 Guía "oficial":
@@ -8,18 +22,18 @@ Guía "oficial":
 
 Normalmente, antes de empezar es bueno actualizar todo
 
->`git pull`
+* `git checkout [branch donde vais a trabajar]`
+* `git pull`
 
 Una vez que hayais hecho varios cambios que esten relacionados, haced un
 _commit_ con un comentario que los agrupe.
 
->`git add .`
-
->`git commit -m "comentario"`
+* `git add .`
+* `git commit -m "comentario"`
 
 Cuando esteis seguros de que esta todo bien, subid todo al servidor
 
->`git push`.
+* `git push`.
 
 ### Git cheat sheet
 
@@ -49,4 +63,4 @@ Cuando esteis seguros de que esta todo bien, subid todo al servidor
     - `git checkout [nombre de branch]`
 
 * Unir _branch_ a _master_ (_merge_):
-    - `git merge master` (estando en la _branch_ a unir)
+    - `git merge [branch a unir]` (estando en _master_)
