@@ -1,5 +1,5 @@
-function[ CL, CD ] = ala ( nSecciones, nPanelX, nPanelY, d_q, t_q, ...
-                           c_q, phi_q, b_q, vinf, h, alpha )
+function[ CL, CD ] = ala ( nSecciones, nPanelX, nPanelY, foilname, ...
+                           d_q, t_q, c_q, phi_q, b_q, vinf, h, alpha )
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ALA calcula las propiedades del ala a partir de la geometria
@@ -39,7 +39,7 @@ yCG = yRef;
 zCG = zRef;
 
 % Estrechamientos
-taperRatio = c_q(2:end) / c_q(1:end-1);
+taperRatio = c_q(2:end) ./ c_q(1:end-1);
 
 % Structs iniciales para las funciones de Tornado
 geo.meshtype  = ones(1,nSecciones);
@@ -69,18 +69,15 @@ geo.fc = zeros(1,nSecciones);          % '...'
 geo.flap_vector= zeros(1,nSecciones);  % '...'
 
 % poner el nombre del perfil que genere el modulo perfil
-geo.foil(:,:,1)= repmat({'akm-01.dat'}, 1, nSecciones);
-geo.foil(:,:,2)= repmat({'akm-01.dat'}, 1, nSecciones);
+geo.foil(:,:,1)= repmat({foilname}, 1, nSecciones);
+geo.foil(:,:,2)= repmat({foilname}, 1, nSecciones);
 
 % Condiciones atmosfericas
 [rho, a, ~, ~] = ISAtmosphere(h);
 Mach = vinf/a;
 
 % Condiciones de vuelo
-alpha    = deg2rad(alpha);
-
 state.AS     = vinf;   % Airspeed m/s
-state.alpha  = alpha;  % Angle of attack, radians
 state.betha  = 0;      % Angle of sideslip, radians
 state.P      = 0;      % Rollrate, rad/s
 state.Q      = 0;      % pitchrate, rad/s
@@ -95,15 +92,24 @@ state.pgcorr = 0;      % Apply prandtl glauert compressibility
 % Calculo de la eficiencia maxima
 
 % Mallado
-[~, ref] = fLattice_setup2(geo, state, latticetype);
+state.alpha = 0.0;  % No importa el valor aqui
+[~, ref]    = fLattice_setup2(geo, state, latticetype);
 
 % Resistencia parasita, superficie mojada y volumen
 [CD0_wing, results.Re, results.Swet, results.Vol] = zeroliftdragpred(Mach, state.ALT, geo, ref);
 
 % Calculo de CL y CD (inducida)
-[CL, CD] = solverloop5(results, state, geo, alpha);
+% Barrido en alpha
+for i = 1, length(alpha)
+    state.alpha    = alpha(i);
+    [lattice, ref] = fLattice_setup2(geo, state, latticetype);
+    results        = solver9(results, state, geo, lattice, ref);
+    results        = coeff_create3(results, lattice, state, ref, geo);
+    results.alpha_sweep(i) = state.alpha;	
+end
 
 % Calculo de la resistencia total
-CD = CD + sum(CD0_wing);
+CL = results.CL;
+CD = results.CD + sum(CD0_wing);
 
 end

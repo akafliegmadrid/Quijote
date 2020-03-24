@@ -18,7 +18,7 @@ Re         = 1e6;             % Numero de Reynolds del perfil
 h          = 1500;            % Altura de vuelo [m]
 alpha      = [-2.0 0.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
 nPerfil    = 200;             % Numero de paneles en el perfil
-foilName   = 'Airfoil.dat';   % Archivo con las coordenadas del perfil
+foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
 nSecciones = 3;               % Numero de secciones del ala (quiebros + 1)
 nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
@@ -42,19 +42,20 @@ b15  = [ 0.05  0.1   0.3  ];  % [c^-1]
 b17  = [ 0.5   0.9   1.2  ];  % [c^-1]
 
 % Parametros del ala (min, inicial, max)
-bs = [ 6.0  8.0  9.0; ...    % [m]
+bs = [ 6.0  8.0  9.0; ...    % Envergadura [m]
       0.5  1.0  1.2; ...
       0.5  1.0  1.2  ];
-cs = [ 0.5  0.9  1.5; ...    % [m]
+cs = [ 0.5  0.9  1.5; ...    % Cuerda      [m]
        0.2  0.5  1.0; ...
-       0.2  0.4  0.8  ];
-fs = [ -4.0  -1.0  1.0; ...  % [deg]
+       0.2  0.4  0.8; ...
+       0.2  0.3  0.5  ];
+fs = [ -4.0  -1.0  1.0; ...  % Flecha 1/4  [deg]
        -2.0   0.0  1.0; ...
         0.0   1.0  4.0  ];
-ds = [ 0.0  2.0  5.0;  ...   % [deg]
+ds = [ 0.0  2.0  5.0;  ...   % Diedro      [deg]
        0.0  5.0  10.0; ...
        0.0  7.0  10.0  ];
-ts = [ -5.0  2.0  5.0;  ...  % [deg]
+ts = [ -5.0  2.0  5.0;  ...  % Torsion     [deg]
         0.0  2.0  8.0;  ...
         0.0  2.0  10.0; ...
         0.0  2.0  10.0  ];

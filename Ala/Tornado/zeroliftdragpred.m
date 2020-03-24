@@ -373,14 +373,14 @@ switch TYPE
     
     case 2
         try
-        cd(settings.afdir)
+        % cd(settings.afdir)  (**)
             if k==1
                  A(:,:)=load(char(foil)); %inner coordinates 
             else
                  B(:,:)=load(char(foil)); %outer coordinates    
             end
            
-        cd(settings.hdir)
+        % cd(settings.hdir) (**)
         end
 
 end%switch

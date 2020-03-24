@@ -1,4 +1,4 @@
-function [ x, y ] = BP3434( npaneles, rle, xt, yt, bte, dzte, yle,...
+function [ x, yu, yl ] = BP3434( npaneles, rle, xt, yt, bte, dzte, yle,...
                             xc, yc, ate, zte, b0, b2, b8, b15, b17 )
 % BP3434 calcula 'n' nodos a lo largo del perfil a partir de 15 parametros
 %   Basado en el articulo:
@@ -119,12 +119,8 @@ end
 yac = [ ylc, ytc ];
 
 %% Definicion del perfil
-yau = yac + yat;
-yad = yac - yat;
-
-% Y se concatenan los puntos para formar 'x' e 'y'
-% El ultimo punto (TE) esta duplicado
-x = [ fliplr(xat), xat(2:end) ];
-y = [ fliplr(yad), yau(2:end) ];
+x  = xat;
+yu = yac + yat;
+yl = yac - yat;
 
 end

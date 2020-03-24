@@ -26,10 +26,10 @@ b17  = in(15);
 
 % Ala
 bs   = in(16:18);
-cs   = in(19:21);
-fs   = in(22:24);
-ds   = in(25:27);
-ts   = in(28:31);
+cs   = in(19:22);
+fs   = in(23:25);
+ds   = in(26:28);
+ts   = in(29:32);
 
 %% Algunos parametros de la simulacion
 % Numero de Mach
@@ -39,12 +39,16 @@ Ma = vinf / a;
 % Valor medio de alpha
 alphaTornado = (alpha(1) - alpha(end)) / 2.0;
 
-%% Funciones 'perfil' y 'ala'
-[Cl, Cd, Cm] = perfil(nPerfil, foilname, rle, xt, yt,     ...
-                      bte, dzte, yle, xc, yc, ate, zte,   ...
-                      b0, b2, b8, b15, b17, alpha, Re, Ma);
+% Nombres de los archivos (rutas absolutas)
+xfoilName   = [pwd filesep 'Perfil' filesep foilname '_xfoil.dat'];
+tornadoName = [pwd filesep 'Perfil' filesep foilname '_tornado.dat'];
 
-[CL, CD] = ala(nSecciones, nPanelX, nPanelY, ds, ts, ...
+%% Funciones 'perfil' y 'ala'
+[Cl, Cd, Cm] = perfil(nPerfil, xfoilName, tornadoName, rle, xt, yt, ...
+                      bte, dzte, yle, xc, yc, ate, zte, b0, b2, b8, ...
+                      b15, b17, alpha, Re, Ma);
+
+[CL, CD] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
                cs, fs, bs, vinf, h, alphaTornado);
 
 %% Funcion objetivo
