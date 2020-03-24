@@ -68,7 +68,7 @@ while converged==0
     
     if convL(k-1)<=criterion
         if convD(k-1)<=criterion
-           display('CONVERGED!')
+           disp('CONVERGED!')
            converged=1;
            converge.nx=g1.nx;
            converge.ny=g1.ny;

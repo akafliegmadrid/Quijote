@@ -262,13 +262,13 @@ for s=1:noofwings
         %Upper surface
         Xu = A(2:L+1,1)/A(L+1,1); % It is divided by A(L+1,1), which is the max absciss of the aifoil, in order to normalize the airfoil to a chord c=1
         Yu = A(2:L+1,2)/A(L+1,1); % Again, normalising (this should alrady have been done in the coordinate file.)                                       
-        Yiu = interp1(Xu,Yu,X,'cubic','extrap'); % Interpolate to get all the points of the upper surface at kown X
+        Yiu = interp1(Xu,Yu,X,'pchip','extrap'); % Interpolate to get all the points of the upper surface at kown X
                                                  % coordinates that will be
                                                  % the same abscisses for lower and upper surfaces
         % Lower surface
         Xl = A(L+2:end,1)/A(L+1,1);
         Yl = A(L+2:end,2)/A(L+1,1);
-        Yil = interp1(Xl,Yl,X,'cubic','extrap'); % Interpolate the lower surface at the X abcisses
+        Yil = interp1(Xl,Yl,X,'pchip','extrap'); % Interpolate the lower surface at the X abcisses
 
         tc=Yiu-Yil; %thickness to chord ratio 
         
@@ -287,13 +287,13 @@ for s=1:noofwings
         %Upper surface
         Xu = B(2:L+1,1)/B(L+1,1); % It is divided by A(L+1,1), which is the max absciss of the aifoil, in order to normalize the airfoil to a chord c=1
         Yu = B(2:L+1,2)/B(L+1,1); % Again, normalising (this should alrady have been done in the coordinate file.)                                       
-        Yiu = interp1(Xu,Yu,X,'cubic','extrap'); % Interpolate to get all the points of the upper surface at kown X
+        Yiu = interp1(Xu,Yu,X,'pchip','extrap'); % Interpolate to get all the points of the upper surface at kown X
                                                  % coordinates that will be
                                                  % the same abscisses for lower and upper surfaces
         % Lower surface
         Xl = B(L+2:end,1)/B(L+1,1);
         Yl = B(L+2:end,2)/B(L+1,1);
-        Yil = interp1(Xl,Yl,X,'cubic','extrap'); % Interpolate the lower surface at the X abcisses
+        Yil = interp1(Xl,Yl,X,'pchip','extrap'); % Interpolate the lower surface at the X abcisses
 
         tc=Yiu-Yil; %thickness to chord ratio       
         

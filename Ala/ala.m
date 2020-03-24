@@ -100,16 +100,19 @@ state.alpha = 0.0;  % No importa el valor aqui
 
 % Calculo de CL y CD (inducida)
 % Barrido en alpha
-for i = 1, length(alpha)
+CL = zeros(size(alpha));
+CD = zeros(size(alpha));
+for i = 1: length(alpha)
     state.alpha    = alpha(i);
     [lattice, ref] = fLattice_setup2(geo, state, latticetype);
     results        = solver9(results, state, geo, lattice, ref);
     results        = coeff_create3(results, lattice, state, ref, geo);
     results.alpha_sweep(i) = state.alpha;	
+    CL(i) = results.CL;
+    CD(i) = results.CD; 
 end
 
 % Calculo de la resistencia total
-CL = results.CL;
-CD = results.CD + sum(CD0_wing);
+CD = CD + sum(CD0_wing);
 
 end

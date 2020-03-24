@@ -20,7 +20,7 @@ alpha      = [-2.0 0.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
 nPerfil    = 200;             % Numero de paneles en el perfil
 foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
-nSecciones = 3;               % Numero de secciones del ala (quiebros + 1)
+nSecciones = 3;               % Numero de secciones del ala
 nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
 nPanelY    = [40 20 10];      % No. de paneles en la direccion de la env.
 
@@ -66,17 +66,18 @@ algorithmOptions = optimoptions('fmincon',                         ...
                                 'Display',       'notify',         ...
                                 'MaxIterations', 1000,             ...
                                 'PlotFcn',       'optimplotfval',  ...
-                                'UseParallel',   false             );
+                                'UseParallel',   true              );
 
 %% INPUTS DEL ALGORITMO
 
 % Conversion a radianes
-bte = deg2rad(bte);
-yle = deg2rad(yle);
-ate = deg2rad(ate);
-fs  = deg2rad(fs);
-ds  = deg2rad(ds);
-ts  = deg2rad(ts);
+alpha = deg2rad(alpha);
+bte   = deg2rad(bte);
+yle   = deg2rad(yle);
+ate   = deg2rad(ate);
+fs    = deg2rad(fs);
+ds    = deg2rad(ds);
+ts    = deg2rad(ts);
 
 % Vector de estado
 x0 = [rle(2) xt(2) yt(2) bte(2) dzte(2) yle(2) xc(2) yc(2)   ...

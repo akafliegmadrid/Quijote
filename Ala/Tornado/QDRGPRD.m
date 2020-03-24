@@ -282,17 +282,17 @@ CLINCWN=zeros(numbmhs+1,numbcls+1);% incremental lift coeff. of wing
 CLWINGA=zeros(numbmhs+1,numbcls+1);% actual lift coeff. of wing
 for i=lwrmhid:uprmhid
 % interpolate neutral point for given Mach and then adjust for centre of gravity
-    npointi=0.1*interp1(NPLCCOR(1,1:numbnpl),NPLCCOR(2,1:numbnpl),MASTDRG(i,1),'cubic')-0.01*REFAECN;
+    npointi=0.1*interp1(NPLCCOR(1,1:numbnpl),NPLCCOR(2,1:numbnpl),MASTDRG(i,1),'pchip')-0.01*REFAECN;
 % interpolate vehicular lift-curve slope for given Mach
-    clacngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'cubic');
+    clacngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'pchip');
 % interpolate tail-off lift-curve slope for given Mach
-    clawngi=interp1(CLAWCOR(1,1:numclaw),CLAWCOR(2,1:numclaw),MASTDRG(i,1),'cubic');
+    clawngi=interp1(CLAWCOR(1,1:numclaw),CLAWCOR(2,1:numclaw),MASTDRG(i,1),'pchip');
 % interpolate the mean downwash angle
-    mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'cubic');
+    mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'pchip');
 % interpolate downwash gradient for given Mach
-    dnwashi=0.1*interp1(DWHTCOR(1,1:numbdwh),DWHTCOR(2,1:numbdwh),MASTDRG(i,1),'cubic');
+    dnwashi=0.1*interp1(DWHTCOR(1,1:numbdwh),DWHTCOR(2,1:numbdwh),MASTDRG(i,1),'pchip');
 % interpolate zero-lift pitching moment for given Mach
-    zelipmi=0.1*interp1(ZLPMCOR(1,1:numbzlm),ZLPMCOR(2,1:numbzlm),MASTDRG(i,1),'cubic');
+    zelipmi=0.1*interp1(ZLPMCOR(1,1:numbzlm),ZLPMCOR(2,1:numbzlm),MASTDRG(i,1),'pchip');
     findcnt=0;% flag used to estimate the zero-lift AoA
     for j=lwrclid:uprclid
         DCLWDCL(i,j)=clawngi/clacngi;
@@ -320,7 +320,7 @@ for i=lwrmhid:uprmhid
     for j=lwrclid:uprclid
         TCDTINC(i,j)=1/(pi*REFHTAR*0.65)*(CLHTAIL(i,j)^2)*REFAHTL/REFWARE*1e4;
         TCDWINC(i,j)=VORINDF*((CLWINGA(i,j)^2)-(0.01*MASTDRG(1,j)^2))*1e4;
-        mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'cubic');
+        mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'pchip');
         TTTHRST(i,j)=CLHTAIL(i,j)*sin(mdnwhti/180*pi)*REFAHTL/REFWARE*1e4;
     end
 end
@@ -357,7 +357,7 @@ TCDCINC=zeros(numbmhs+1,numbcls+1);% incremental compressibility drag due to win
 for i=lwrmhid:uprmhid
     for j=lwrclid:uprclid
         if MASTDIY(i,j)>0
-           incclci=interp1(MASTDRG(1,lwrclid:uprclid),MASTDIY(i,lwrclid:uprclid),10*CLWINGA(i,j),'cubic');
+           incclci=interp1(MASTDRG(1,lwrclid:uprclid),MASTDIY(i,lwrclid:uprclid),10*CLWINGA(i,j),'pchip');
            TCDCINC(i,j)=incclci-MASTDIY(i,j);
         end
     end
@@ -379,7 +379,7 @@ DDVMACH=zeros(numbcls+1,1);% drag divergence mach maxtrix
 MREFCAL=zeros(numbcls+1,1);% technology ref mach for drag rise + divergence behaviour
 for j=lwrclid:uprclid
     tempsto=find(MASTDIN(lwrmhid:uprmhid,j)>0);L=length(tempsto);
-    DDVMACH(j)=interp1(MASTDIN(tempsto(1):tempsto(L),j),MASTDRG(tempsto(1):tempsto(L),1)/10,1,'cubic');
+    DDVMACH(j)=interp1(MASTDIN(tempsto(1):tempsto(L),j),MASTDRG(tempsto(1):tempsto(L),1)/10,1,'pchip');
     MREFCAL(j)=DDVMACH(j)*cos(REFWQSW*pi/180)+0.1*((MASTDRG(1,j)/10/(cos(REFWQSW*pi/180)^2))^1.5)+REFWTTC/cos(REFWQSW*pi/180);
 end
 %MASTDRG
@@ -480,7 +480,7 @@ tarrefc=0;precdrg=0;eskndrg=0;
 if (selreyn>0 & taraltd~=REFALTD) | (selreyn>0 & tarmach~=REFMACH)
     tarrefc=qxreynd(qxdmtks(tarmach,taraltd/100,tardisa),taraltd/100,tardisa,1)/REFVOMU-1;
 % drag count incremental correction based upon supplied data
-    precdrg=interp1(REYNCOR(1,1:numbrey),REYNCOR(2,1:numbrey),tarrefc*10,'cubic');
+    precdrg=interp1(REYNCOR(1,1:numbrey),REYNCOR(2,1:numbrey),tarrefc*10,'pchip');
 else
     precdrg=EZELDRG*(qxskfrc(qxdmtks(tarmach,taraltd/100,tardisa),taraltd/100,tardisa,1, ...
                              tarmach)/qxskfrc(qxdmtks(REFMACH,REFALTD,0),REFALTD,0,1,REFMACH)-1);
@@ -499,15 +499,15 @@ for i=1:4
             7)*pdrgprd(i,8)*pdrgprd(i,9)/REFWARE+precdrg*pdrgprd(i,16)/EZELDRG;
 end     
 % look up the aerofoil technology level
-emrefcl=interp1(MASTDRG(1,lwrclid:uprclid),rot90(MREFCAL(lwrclid:uprclid)),tarlift*10,'cubic');
+emrefcl=interp1(MASTDRG(1,lwrclid:uprclid),rot90(MREFCAL(lwrclid:uprclid)),tarlift*10,'pchip');
 % predict a revised drag divergence Mach 
 eddmach=(emrefcl-(0.1*((tarlift/(cos(pdrgprd(1,13)*pi/180)^2))^1.5)+ ...
                           pdrgprd(1,13)/cos(pdrgprd(1,11)*pi/180)))/cos(pdrgprd(1,11)*pi/180);
 % identify an equivalent CL according to the revised geometry
-eeqopcl=interp1(rot90(DDVMACH(lwrclid:uprclid)),MASTDRG(1,lwrclid:uprclid),eddmach,'cubic')/10;                      
+eeqopcl=interp1(rot90(DDVMACH(lwrclid:uprclid)),MASTDRG(1,lwrclid:uprclid),eddmach,'pchip')/10;                      
 % final results of drag constituents
 eskndrg=eskndrg+ancsko*(1+precdrg/EZELDRG);% revised CDo
-efrmdrg=interp1(MASTDRG(1,lwrclid:uprclid),PROFCOR(lwrclid:uprclid),tarlift*10,'cubic');% form drag
+efrmdrg=interp1(MASTDRG(1,lwrclid:uprclid),PROFCOR(lwrclid:uprclid),tarlift*10,'pchip');% form drag
 % vehicular compressibility drag
 ecomdrg=interp2(MASTDRG(1,lwrclid:uprclid),rot90(MASTDRG(lwrmhid:uprmhid,1)), ...
                           MASTDIZ(lwrmhid:uprmhid,lwrclid:uprclid),eeqopcl*10,tarmach*10,'cubic');

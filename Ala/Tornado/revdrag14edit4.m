@@ -203,11 +203,11 @@ CLINCWN=zeros(numbmhs+1,numbcls+1);% incremental lift coeff. of wing
 CLWINGA=zeros(numbmhs+1,numbcls+1);% actual lift coeff. of wing
 for i=lwrmhid:uprmhid
 % interpolate neutral point for given Mach and then adjust for centre of gravity
-    npointi=0.1*interp1(NPLCCOR(1,1:numbnpl),NPLCCOR(2,1:numbnpl),MASTDRG(i,1),'cubic')-0.01*REFCGLC;
+    npointi=0.1*interp1(NPLCCOR(1,1:numbnpl),NPLCCOR(2,1:numbnpl),MASTDRG(i,1),'pchip')-0.01*REFCGLC;
 % interpolate lift-curve slope for given Mach
-    clawngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'cubic');
+    clawngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'pchip');
 % interpolate zero-lift pitching moment for given Mach
-    zelipmi=-0.1*interp1(ZLPMCOR(1,1:selzlpm),ZLPMCOR(2,1:selzlpm),MASTDRG(i,1),'cubic');
+    zelipmi=-0.1*interp1(ZLPMCOR(1,1:selzlpm),ZLPMCOR(2,1:selzlpm),MASTDRG(i,1),'pchip');
     for j=lwrclid:uprclid
         CMALPHA(i,j)=-npointi*clawngi;
         DEALPHA(i,j)=-npointi*0.1*MASTDRG(1,j)/CMALPHA(i,j);
@@ -230,8 +230,8 @@ HTALPHA=zeros(numbmhs+1,numbcls+1);% AoA of H-tail when trimmed
 [dclwdcl]=numdifd(numbmhs,numbcls,lwrmhid,uprmhid,lwrclid,uprclid,MASTDRG,CLWINGA,0.1,1,1);
 for i=lwrmhid:uprmhid
     for j=lwrclid:uprclid
-        dnwashi=0.1*interp1(DWHTCOR(1,1:numbdwh),DWHTCOR(2,1:numbdwh),MASTDRG(i,1),'cubic');
-        clawngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'cubic');
+        dnwashi=0.1*interp1(DWHTCOR(1,1:numbdwh),DWHTCOR(2,1:numbdwh),MASTDRG(i,1),'pchip');
+        clawngi=interp1(CLACCOR(1,1:numbcla),CLACCOR(2,1:numbcla),MASTDRG(i,1),'pchip');
         tauclah(i,j)=clawngi*(1-dclwdcl(i,j))*REFWARE/(REFAHTL*(1-dnwashi));        
         HTALPHA(i,j)=CLHTAIL(i,j)/tauclah(i,j);
     end
@@ -299,7 +299,7 @@ for i=lwrmhid:uprmhid
     for j=lwrclid:uprclid
         TCDTINC(i,j)=1/(pi*REFHTAR*0.65)*(CLHTAIL(i,j)^2)*REFAHTL/REFWARE*1e4;
         TCDWINC(i,j)=VORINDF*((CLWINGA(i,j)^2)-(0.01*MASTDRG(1,j)^2))*1e4;
-        mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'cubic');
+        mdnwhti=interp1(MDWTCOR(1,1:numbmdw),MDWTCOR(2,1:numbmdw),MASTDRG(i,1),'pchip');
         TTTHRST(i,j)=CLHTAIL(i,j)*sin(mdnwhti/180*pi)*REFAHTL/REFWARE*1e4;
     end
 end
@@ -322,7 +322,7 @@ TCDCINC=zeros(numbmhs+1,numbcls+1);% incremental compressibility drag due to win
 for i=lwrmhid:uprmhid
     for j=lwrclid:uprclid
         if MASTDIZ(i,j)>0
-           incclci=interp1(MASTDRG(1,lwrclid:uprclid),MASTDIZ(i,lwrclid:uprclid),10*CLWINGA(i,j),'cubic');
+           incclci=interp1(MASTDRG(1,lwrclid:uprclid),MASTDIZ(i,lwrclid:uprclid),10*CLWINGA(i,j),'pchip');
            TCDCINC(i,j)=incclci-MASTDIZ(i,j);
         end
     end

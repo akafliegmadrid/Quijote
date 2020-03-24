@@ -791,8 +791,8 @@ for j=0:(ny-1);
                                          %for spotting an earlier error
                                          %here.
       
-      lemma_1_S(t)=interp1(X_1_S,lemma_1_S_tot,a3,'cubic','extrap'); %element inboard camber slope  %ADRIEN
-      lemma_2_S(t)=interp1(X_2_S,lemma_2_S_tot,a3,'cubic','extrap'); %element outboard camber slope %ADRIEN
+      lemma_1_S(t)=interp1(X_1_S,lemma_1_S_tot,a3,'pchip','extrap'); %element inboard camber slope  %ADRIEN
+      lemma_2_S(t)=interp1(X_2_S,lemma_2_S_tot,a3,'pchip','extrap'); %element outboard camber slope %ADRIEN
 
       
       S(t)=(lemma_1_S(t)*(ny-j)+lemma_2_S(t)*(j))/ny; %avarage slope for panels on
@@ -963,7 +963,7 @@ function[p2]=trot3(hinge,p,alpha)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % rotates point p around hinge alpha rads.%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ref: 	Råde, Westergren, BETA 4th ed,   
+% ref: 	Rï¿½de, Westergren, BETA 4th ed,   
 %			studentlitteratur, 1998			    	
 %			pp:107-108							   	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1029,7 +1029,7 @@ function [xa,angle]=slope3(foil)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates the angle of normalrotation due to camber	 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  Author:Adrien Bérard, KTH, Department of Aeronautics  %
+%  Author:Adrien Bï¿½rard, KTH, Department of Aeronautics  %
 %			              and
 %         Tomas Melin, University of Bristol, Aero Dept.
 %                    
@@ -1216,7 +1216,7 @@ function [xa,angle]=slope2(foil)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates the angle of normalrotation due to camber	 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  Author:Adrien Bérard, KTH, Department of Aeronautics  %
+%  Author:Adrien Bï¿½rard, KTH, Department of Aeronautics  %
 %			              and
 %         Tomas Melin, University of Bristol, Aero Dept.
 %                    
@@ -1274,11 +1274,11 @@ switch TYPE
 %%
 
             try
-                cd aircraft
-                cd airfoil
+                % cd aircraft (**)
+                % cd airfoil  (**)
                 A=load(char(foil));
-                cd ..
-                cd ..
+                % cd ..
+                % cd ..
             catch
                 cd ..
                 cd ..
@@ -1306,14 +1306,14 @@ switch TYPE
 
 %% Interpolate to get all the points of the upper surface at kown X
 %% coordinates that will be the same abscisses for lower and upper surfaces
-        Yiu = interp1(Xu,Yu,X,'cubic','extrap');
+        Yiu = interp1(Xu,Yu,X,'pchip','extrap');
 
 % Lower surface
         Xl = A(L+2:end,1)/A(L+1,1);
         Yl = A(L+2:end,2)/A(L+1,1);
 
 %% Interpolate the lower surface at the X abcisses
-        Yil = interp1(Xl,Yl,X,'cubic','extrap');
+        Yil = interp1(Xl,Yl,X,'pchip','extrap');
 
 %% Compute the camber vector
         C=1/2*(Yiu+Yil);

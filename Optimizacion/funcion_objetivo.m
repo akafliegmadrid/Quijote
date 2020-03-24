@@ -36,9 +36,6 @@ ts   = in(29:32);
 [~, a, ~, ~] = ISAtmosphere(h);
 Ma = vinf / a;
 
-% Valor medio de alpha
-alphaTornado = (alpha(1) - alpha(end)) / 2.0;
-
 % Nombres de los archivos (rutas absolutas)
 xfoilName   = [pwd filesep 'Perfil' filesep foilname '_xfoil.dat'];
 tornadoName = [pwd filesep 'Perfil' filesep foilname '_tornado.dat'];
@@ -49,9 +46,11 @@ tornadoName = [pwd filesep 'Perfil' filesep foilname '_tornado.dat'];
                       b15, b17, alpha, Re, Ma);
 
 [CL, CD] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
-               cs, fs, bs, vinf, h, alphaTornado);
+               cs, fs, bs, vinf, h, alpha);
 
 %% Funcion objetivo
-out = -CL^(3.0/2.0)/CD - CL/CD;
+alcance    = max(CL.^(3.0/2.0)./CD);
+eficiencia = max(CL./CD);
+out = -alcance - eficiencia;
 
 end
