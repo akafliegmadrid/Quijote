@@ -26,16 +26,17 @@ fprintf(fid, '%9.5f  %9.5f\n', [x; yl]);
 fclose(fid);
 
 % Llamada a Xfoil
-%polar = xfoil(xfoilName, alpha, Re, Ma);
+localXfoilName = xfoilName(find(xfoilName==filesep,1,'last')+1:end);
+polar = xfoil(localXfoilName, alpha, Re, Ma);
 
 % Valores de salida de la funcion
-%Cl = polar.CL;
-%Cd = polar.CD + polar.CDp;
-%Cm = polar.CM;
+Cl = polar.CL;
+Cd = polar.CD + polar.CDp;
+Cm = polar.CM;
 
 % DEBUG
-Cl = 1.2;
-Cd = 0.004;
-Cm = -0.01;
+%Cl = 1.2;
+%Cd = 0.004;
+%Cm = -0.01;
 
 end

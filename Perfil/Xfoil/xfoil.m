@@ -158,8 +158,17 @@ else
   fprintf(fid,'\nquit\n');
   fclose(fid);
 
+  % find the right command for the current platform (**)
+  if ispc
+      xfoilExe = 'xfoil.exe';
+  elseif isunix || ismac
+      xfoilExe = 'xfoil';
+  else
+      error([mfilename ':system'],'Your OS must be Windows, Mac or Linux');
+  end
+  
   % execute xfoil
-  cmd = sprintf('cd %s && ./xfoil.exe < xfoil.inp > xfoil.out',wd);
+  cmd = sprintf('cd %s && %s < xfoil.inp > xfoil.out',wd,xfoilExe);
   [status,result] = system(cmd);
   if (status~=0),
     disp(result);

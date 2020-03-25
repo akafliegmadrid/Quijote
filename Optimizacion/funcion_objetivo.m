@@ -37,20 +37,20 @@ ts   = in(29:32);
 Ma = vinf / a;
 
 % Nombres de los archivos (rutas absolutas)
-xfoilName   = [pwd filesep 'Perfil' filesep foilname '_xfoil.dat'];
-tornadoName = [pwd filesep 'Perfil' filesep foilname '_tornado.dat'];
+xfoilName   = [pwd filesep 'Perfil' filesep 'Xfoil' filesep foilname '_xfoil.dat'];
+tornadoName = [pwd filesep 'Perfil' filesep 'Xfoil' filesep foilname '_tornado.dat'];
 
 %% Funciones 'perfil' y 'ala'
 [Cl, Cd, Cm] = perfil(nPerfil, xfoilName, tornadoName, rle, xt, yt, ...
                       bte, dzte, yle, xc, yc, ate, zte, b0, b2, b8, ...
                       b15, b17, alpha, Re, Ma);
 
-[CL, CD] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
-               cs, fs, bs, vinf, h, alpha);
+%[CL, CD] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
+%               cs, fs, bs, vinf, h, alpha);
 
 %% Funcion objetivo
-alcance    = max(CL.^(3.0/2.0)./CD);
-eficiencia = max(CL./CD);
-out = -alcance - eficiencia;
+alcance    = max(Cl.^(3.0/2.0)./Cd);
+eficiencia = max(Cl./Cd);
+out = -alcance - eficiencia - max(abs(Cm));
 
 end
