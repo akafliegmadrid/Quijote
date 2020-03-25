@@ -38,14 +38,14 @@ y(i,:) = [fliplr(yl) yu(2:end)];
 end
 
 %% Plots
-% El primer perfil se dibuja en linea continua
-plot(x(1,:), y(1,:))
 hold on
-
-% El resto en linea discontinua
+% Todos los perfiles en linea discontinua
 for i = 2: length(rle)
     plot(x(i,:), y(i,:), '.')
 end
+
+% Excepto el primero, que se dibuja en linea continua
+plot(x(1,:), y(1,:))
 axis equal
 hold off
 
