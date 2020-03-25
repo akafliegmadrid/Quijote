@@ -27,12 +27,12 @@ fclose(fid);
 
 % Llamada a Xfoil
 localXfoilName = xfoilName(find(xfoilName==filesep,1,'last')+1:end);
-polar = xfoil(localXfoilName, alpha, Re, Ma);
+polar = xfoil(localXfoilName, alpha, Re, Ma, '/plop/g');
 
 % Valores de salida de la funcion
 Cl = polar.CL;
 Cd = polar.CD + polar.CDp;
-Cm = polar.CM;
+Cm = polar.Cm;
 
 % DEBUG
 %Cl = 1.2;

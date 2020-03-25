@@ -16,7 +16,7 @@ clc
 Vinf       = 30.0;            % Velocidad de vuelo [m/s]
 Re         = 1e6;             % Numero de Reynolds del perfil
 h          = 1500;            % Altura de vuelo [m]
-alpha      = [-2.0 0.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
+alpha      = [-2.0 -1.0 0.0 1.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
 nPerfil    = 200;             % Numero de paneles en el perfil
 foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
@@ -24,22 +24,22 @@ nSecciones = 3;               % Numero de secciones del ala
 nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
 nPanelY    = [40 20 10];      % No. de paneles en la direccion de la env.
 
-% Parametros del perfil (min, inicial, max)
-rle  = [ 0.05  0.1   0.15 ];  % [c^-1]
-xt   = [ 0.1   0.25  0.6  ];  % [c^-1]
-yt   = [ 0.02  0.05  0.1  ];  % [c^-1]
-bte  = [ 10.0  15.0  20.0 ];  % [deg]
-dzte = [ 0.01  0.02  0.04 ];  % [c^-1]
-yle  = [ 10.0  15.0  20.0 ];  % [deg]
-xc   = [ 0.1   0.2   0.4  ];  % [c^-1]
-yc   = [ 0.02  0.05  0.1  ];  % [c^-1]
-ate  = [ 5.0   10.0  15.0 ];  % [deg]
-zte  = [ 0.005 0.01  0.02 ];  % [c^-1]
-b0   = [ 0.05  0.1   0.3  ];  % [c^-1]
-b2   = [ 0.1   0.2   0.4  ];  % [c^-1]
-b8   = [ 0.02  0.05  0.1  ];  % [c^-1]
-b15  = [ 0.05  0.1   0.3  ];  % [c^-1]
-b17  = [ 0.5   0.9   1.2  ];  % [c^-1]
+% Parametros del perfil BP3434 (min, inicial, max)
+rle  = [ 0.04  0.05  0.6   ];  % [c^-1]
+xt   = [ 0.25  0.3   0.35  ];  % [c^-1]
+yt   = [ 0.04  0.05  0.06  ];  % [c^-1]
+bte  = [ 0.0   2.0   5.0   ];  % [deg]
+dzte = [ 0.0   0.001 0.003 ];  % [c^-1]
+yle  = [ 0.0   5.0   7.0   ];  % [deg]
+xc   = [ 0.4   0.44  0.5   ];  % [c^-1]
+yc   = [ 0.0   0.01  0.02  ];  % [c^-1]
+ate  = [ 0.0   2.0   5.0   ];  % [deg]
+zte  = [ 0.001 0.005 0.01  ];  % [c^-1]
+b0   = [ 0.03  0.05  0.07  ];  % [c^-1]
+b2   = [ 0.1   0.2   0.4   ];  % [c^-1]
+b8   = [ 0.02  0.04  0.06  ];  % [c^-1]
+b15  = [ 0.7   0.75  0.8   ];  % [c^-1]
+b17  = [ 0.85  0.9   0.95  ];  % [c^-1]
 
 % Parametros del ala (min, inicial, max)
 bs = [ 6.0  8.0  9.0; ...    % Envergadura [m]
@@ -59,14 +59,6 @@ ts = [ -5.0  2.0  5.0;  ...  % Torsion     [deg]
         0.0  2.0  8.0;  ...
         0.0  2.0  10.0; ...
         0.0  2.0  10.0  ];
-
-% Opciones de la optimizacion
-algorithmOptions = optimoptions('fmincon',                         ...
-                                'Algorithm',     'interior-point', ...
-                                'Display',       'notify',         ...
-                                'MaxIterations', 1000,             ...
-                                'PlotFcn',       'optimplotfval',  ...
-                                'UseParallel',   true              );
 
 %% INPUTS DEL ALGORITMO
 
@@ -101,7 +93,20 @@ ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
 obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
                             nPanelY, Vinf, h, alpha, Re, x);
 
+% Opciones de la optimizacion
+pltFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0]);
+algorithmOptions = optimoptions('fmincon',                         ...
+                                'Algorithm',     'interior-point', ...
+                                'Display',       'notify',         ...
+                                'MaxIterations', 1000,             ...
+                                'PlotFcn',       pltFcn,         ...
+                                'UseParallel',   false              );
+                            %s'PlotFcn',       {'optimplotfval', ...
+
 %% OPTIMIZACION
 
 geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
                    @restriccionesNoLin, algorithmOptions);
+
+%% PLOTS
+plotPerfil(nPerfil, [x0, geometry])

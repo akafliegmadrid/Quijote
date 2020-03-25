@@ -1,5 +1,5 @@
 function [ x, yu, yl ] = BP3434( npaneles, rle, xt, yt, bte, dzte, yle,...
-                            xc, yc, ate, zte, b0, b2, b8, b15, b17 )
+                                 xc, yc, ate, zte, b0, b2, b8, b15, b17 )
 % BP3434 calcula 'n' nodos a lo largo del perfil a partir de 15 parametros
 %   Basado en el articulo:
 %   Derksen, R. W. & Rogalsky, T. Bezier-PARSEC: An optimized aerofoil
@@ -21,8 +21,8 @@ yc3 = zeros(4, 1);
 xc4 = zeros(5, 1);
 yc4 = zeros(5, 1);
 
-% Inicializacion de 'fsolve'
-options = optimoptions('fsolve', 'Display', 'off');
+% Tolerancia para las raices de los polinomios de Bezier
+tol = 1e-14;
 
 %% Espesor (borde de ataque)
 % Puntos de control
@@ -37,7 +37,9 @@ yc3(3) = yt;
 yc3(4) = yt;
 
 % Posicion de los nodos (equiespaciados)
-[xlt, ylt] = bezier(tlt, xc3, yc3);
+[Cx, Cy] = bezier(xc3, yc3);
+xlt      = polyval(Cx, tlt);
+ylt      = polyval(Cy, tlt);
 
 %% Espesor (borde de salida)
 % Puntos de control
@@ -54,7 +56,9 @@ yc4(4) = dzte + (1.0 - b15) * tan(bte);
 yc4(5) = dzte;
 
 % Posicion de los nodos (equiespaciados)
-[xtt, ytt] = bezier(ttt, xc4, yc4);
+[Cx, Cy] = bezier(xc4, yc4);
+xtt      = polyval(Cx, ttt);
+ytt      = polyval(Cy, ttt);
 
 %% Espesor total
 xat = [ xlt, xtt ];
@@ -73,18 +77,16 @@ yc3(3) = yc;
 yc3(4) = yc;
 
 % Posicion de los nodos (equiespaciados)
+[Cx, Cy] = bezier(xc3, yc3);
 xlc = xat(xat<xc);
-t0  = linspace(0.0, 1.0, length(xlc));
-[tlc, ~, flag, ~] = fsolve(@(t) bezier(t, xc3, yc3) - xlc, t0, options);
-
-% Comprobar la convergencia
-if (flag < 1)
-    error([mfilename ':fsolve'], ['Fallo al calcular la curvatura', ...
-                                  ' en la parte frontal del perfil']);
+tlc = zeros(1, length(xlc));
+for i = 1: length(xlc)
+    Cxt = [Cx(1:end-1) Cx(end)-xlc(i)];
+    sol = roots(Cxt);
+    sol = sol(imag(sol)==0.0);
+    tlc(i) = sol(and(sol>=-tol, sol<=(1.0+tol)));
 end
-
-% Si no hay errores...
-[~, ylc] = bezier(tlc, xc3, yc3);
+ylc = polyval(Cy, tlc);
 
 %% Curvatura (borde de salida)
 % Puntos de control
@@ -101,18 +103,16 @@ yc4(4) = zte + (1.0 - b17) * tan(ate);
 yc4(5) = zte;
 
 % Posicion de los nodos (equiespaciados)
+[Cx, Cy] = bezier(xc4, yc4);
 xtc = xat(xat>=xc);
-t0  = linspace(0.0, 1.0, length(xtc));
-[ttc, ~, flag, ~] = fsolve(@(t) bezier(t, xc4, yc4) - xtc, t0, options);
-
-% Comprobar la convergencia
-if (flag < 1)
-    error([mfilename ':fsolve'], ['Fallo al calcular la curvatura', ...
-                                  ' en la parte trasera del perfil']);
+ttc = zeros(1, length(xtc));
+for i = 1: length(xtc)
+    Cxt = [Cx(1:end-1) Cx(end)-xtc(i)];
+    sol = roots(Cxt);
+    sol = sol(imag(sol)==0.0);
+    ttc(i) = sol(and(sol>=-tol, sol<=(1.0+tol)));
 end
-
-% Todo ha ido bien...
-[~, ytc] = bezier(ttc, xc4, yc4);
+ytc = polyval(Cy, ttc);
 
 %% Curvatura total
 % xac = [ xlc, xtc ];  % Debe coincidir con 'xat'
