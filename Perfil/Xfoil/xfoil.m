@@ -161,8 +161,10 @@ else
   % find the right command for the current platform (**)
   if ispc
       xfoilExe = 'xfoil.exe';
-  elseif isunix || ismac
+  elseif isunix
       xfoilExe = 'xfoil';
+  elseif ismac
+      xfoilExe = 'open xfoil';
   else
       error([mfilename ':system'],'Your OS must be Windows, Mac or Linux');
   end
