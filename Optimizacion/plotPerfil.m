@@ -30,24 +30,24 @@ b17  = in(:,15);
 x = zeros(length(rle), n+1);
 y = zeros(length(rle), n+1);
 for i = 1: length(rle)
-[xp, yu, yl] = BP3434(n, rle(i), xt(i), yt(i), bte(i), dzte(i),    ...
-                        yle(i), xc(i), yc(i), ate(i), zte(i), b0(i), ...
-                        b2(i), b8(i), b15(i), b17(i));
-x(i,:) = [fliplr(xp) xp(2:end)];
-y(i,:) = [fliplr(yl) yu(2:end)];
+    [xp, yu, yl] = BP3434(n, rle(i), xt(i), yt(i), bte(i), dzte(i),    ...
+                          yle(i), xc(i), yc(i), ate(i), zte(i), b0(i), ...
+                          b2(i), b8(i), b15(i), b17(i));
+    x(i,:) = [fliplr(xp) xp(2:end)];
+    y(i,:) = [fliplr(yl) yu(2:end)];
 end
 
 %% Plots
-hold on
+hold off
 % Todos los perfiles en linea discontinua
 for i = 2: length(rle)
-    plot(x(i,:), y(i,:), '.')
+    plot(x(i,:), y(i,:), '-.')
+    hold on
 end
 
 % Excepto el primero, que se dibuja en linea continua
 plot(x(1,:), y(1,:))
 axis equal
-hold off
 
 end
 

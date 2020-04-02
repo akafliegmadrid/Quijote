@@ -21,9 +21,6 @@ yc3 = zeros(4, 1);
 xc4 = zeros(5, 1);
 yc4 = zeros(5, 1);
 
-% Tolerancia para las raices de los polinomios de Bezier
-tol = 1e-14;
-
 %% Espesor (borde de ataque)
 % Puntos de control
 xc3(1) = 0.0;
@@ -80,12 +77,13 @@ yc3(4) = yc;
 [Cx, Cy] = bezier(xc3, yc3);
 xlc = xat(xat<xc);
 tlc = zeros(1, length(xlc));
-for i = 1: length(xlc)
+for i = 2: length(xlc)-1
     Cxt = [Cx(1:end-1) Cx(end)-xlc(i)];
     sol = roots(Cxt);
     sol = sol(imag(sol)==0.0);
-    tlc(i) = sol(and(sol>=-tol, sol<=(1.0+tol)));
+    tlc(i) = sol(and(sol>=0.0, sol<=1.0));
 end
+tlc(end) = 1.0;
 ylc = polyval(Cy, tlc);
 
 %% Curvatura (borde de salida)
@@ -106,12 +104,13 @@ yc4(5) = zte;
 [Cx, Cy] = bezier(xc4, yc4);
 xtc = xat(xat>=xc);
 ttc = zeros(1, length(xtc));
-for i = 1: length(xtc)
+for i = 2: length(xtc)-1
     Cxt = [Cx(1:end-1) Cx(end)-xtc(i)];
     sol = roots(Cxt);
     sol = sol(imag(sol)==0.0);
-    ttc(i) = sol(and(sol>=-tol, sol<=(1.0+tol)));
+    ttc(i) = sol(and(sol>=0.0, sol<=1.0));
 end
+ttc(end) = 1.0;
 ytc = polyval(Cy, ttc);
 
 %% Curvatura total

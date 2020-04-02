@@ -25,21 +25,21 @@ nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
 nPanelY    = [40 20 10];      % No. de paneles en la direccion de la env.
 
 % Parametros del perfil BP3434 (min, inicial, max)
-rle  = [ 0.04  0.05  0.6   ];  % [c^-1]
-xt   = [ 0.25  0.3   0.35  ];  % [c^-1]
-yt   = [ 0.04  0.05  0.06  ];  % [c^-1]
-bte  = [ 0.0   2.0   5.0   ];  % [deg]
-dzte = [ 0.0   0.001 0.003 ];  % [c^-1]
-yle  = [ 0.0   5.0   7.0   ];  % [deg]
-xc   = [ 0.4   0.44  0.5   ];  % [c^-1]
-yc   = [ 0.0   0.01  0.02  ];  % [c^-1]
-ate  = [ 0.0   2.0   5.0   ];  % [deg]
-zte  = [ 0.001 0.005 0.01  ];  % [c^-1]
-b0   = [ 0.03  0.05  0.07  ];  % [c^-1]
-b2   = [ 0.1   0.2   0.4   ];  % [c^-1]
-b8   = [ 0.02  0.04  0.06  ];  % [c^-1]
-b15  = [ 0.7   0.75  0.8   ];  % [c^-1]
-b17  = [ 0.85  0.9   0.95  ];  % [c^-1]
+rle  = [ 0.01  0.015  0.2   ];  % [c^-1]
+xt   = [ 0.25  0.3    0.35  ];  % [c^-1]
+yt   = [ 0.04  0.05   0.06  ];  % [c^-1]
+bte  = [ 0.0   2.0    5.0   ];  % [deg]
+dzte = [ 0.0   0.001  0.003 ];  % [c^-1]
+yle  = [ 0.0   15.0   20.0  ];  % [deg]
+xc   = [ 0.4   0.44   0.5   ];  % [c^-1]
+yc   = [ 0.0   0.02   0.02  ];  % [c^-1]
+ate  = [ 0.0   2.0    5.0   ];  % [deg]
+zte  = [ -0.01 -0.005 0.01  ];  % [c^-1]
+b0   = [ 0.03  0.05   0.07  ];  % [c^-1]
+b2   = [ 0.1   0.2    0.4   ];  % [c^-1]
+b8   = [ 0.02  0.04   0.06  ];  % [c^-1]
+b15  = [ 0.7   0.75   0.8   ];  % [c^-1]
+b17  = [ 0.85  0.9    0.95  ];  % [c^-1]
 
 % Parametros del ala (min, inicial, max)
 bs = [ 6.0  8.0  9.0; ...    % Envergadura [m]
@@ -104,9 +104,15 @@ algorithmOptions = optimoptions('fmincon',                         ...
                                 'UseParallel',   false             );
 
 %% OPTIMIZACION
+% Plot del perfil inicial
+plotPerfil(nPerfil, x0);
+pause
+close
 
+% Optimizacion
 geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
                    @restriccionesNoLin, algorithmOptions);
 
 %% PLOTS
-plotPerfil(nPerfil, [x0, geometry])
+figure();
+plotPerfil(nPerfil, [geometry; x0])
