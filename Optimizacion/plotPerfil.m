@@ -7,7 +7,7 @@ function [ stop ] = plotPerfil( n, in )
 %   Participantes
 %       - Andres Mateo Gabin
 
-stop =  false;
+stop = false;
 
 %% Se extraen los valores de 'in'
 rle  = in(:,1);
@@ -48,6 +48,7 @@ end
 % Excepto el primero, que se dibuja en linea continua
 plot(x(1,:), y(1,:))
 axis equal
+hold off
 
 end
 

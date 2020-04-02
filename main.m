@@ -6,8 +6,8 @@
 %   Participantes:
 %       - Andres Mateo Gabin
 
+close all
 clear
-close
 clc
 
 %% PARAMETROS
@@ -21,8 +21,8 @@ nPerfil    = 200;             % Numero de paneles en el perfil
 foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
 nSecciones = 3;               % Numero de secciones del ala
-nPanelX    = 10;              % No. de paneles en la direccion de la cuerda
-nPanelY    = [40 20 10];      % No. de paneles en la direccion de la env.
+nPanelX    = 4;               % No. de paneles en la direccion de la cuerda
+nPanelY    = [10 2 3];        % No. de paneles en la direccion de la env.
 
 % Parametros del perfil BP3434 (min, inicial, max)
 rle  = [ 0.01  0.015  0.2   ];  % [c^-1]
@@ -43,8 +43,8 @@ b17  = [ 0.85  0.9    0.95  ];  % [c^-1]
 
 % Parametros del ala (min, inicial, max)
 bs = [ 6.0  8.0  9.0; ...    % Envergadura [m]
-      0.5  1.0  1.2; ...
-      0.5  1.0  1.2  ];
+       0.5  1.0  1.2; ...
+       0.5  1.0  1.2  ];
 cs = [ 0.5  0.9  1.5; ...    % Cuerda      [m]
        0.2  0.5  1.0; ...
        0.2  0.4  0.8; ...
@@ -94,20 +94,25 @@ obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
                             nPanelY, Vinf, h, alpha, Re, x);
 
 % Opciones de la optimizacion
-pltFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0]);
+pltPerFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0]);
+pltAlaFcn = @(x, optimValues, state) plotAla(nSecciones, nPanelX, nPanelY, foilName, x);
 algorithmOptions = optimoptions('fmincon',                         ...
                                 'Algorithm',     'interior-point', ...
                                 'Display',       'notify',         ...
                                 'MaxIterations', 1000,             ...
                                 'PlotFcn',       {'optimplotfval', ...
-                                                  pltFcn},         ...
+                                                  pltPerFcn,       ...
+                                                  pltAlaFcn},      ...
                                 'UseParallel',   false             );
 
 %% OPTIMIZACION
 % Plot del perfil inicial
+figure()
 plotPerfil(nPerfil, x0);
+figure()
+plotAla(nSecciones, nPanelX, nPanelY, foilName, x0);
 pause
-close
+close all
 
 % Optimizacion
 geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
@@ -116,3 +121,5 @@ geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
 %% PLOTS
 figure();
 plotPerfil(nPerfil, [geometry; x0])
+figure()
+plotAla(nSecciones, nPanelX, nPanelY, foilName, geometry);

@@ -25,11 +25,11 @@ b15  = in(14);
 b17  = in(15);
 
 % Ala
-bs   = in(16:18);
-cs   = in(19:22);
-fs   = in(23:25);
-ds   = in(26:28);
-ts   = in(29:32);
+bs = in(16:18);
+cs = in(19:22);
+fs = in(23:25);
+ds = in(26:28);
+ts = in(29:32);
 
 %% Algunos parametros de la simulacion
 % Numero de Mach
@@ -37,20 +37,27 @@ ts   = in(29:32);
 Ma = vinf / a;
 
 % Nombres de los archivos (rutas absolutas)
-xfoilName   = [pwd filesep 'Perfil' filesep 'Xfoil' filesep foilname '_xfoil.dat'];
-tornadoName = [pwd filesep 'Perfil' filesep 'Xfoil' filesep foilname '_tornado.dat'];
+xfoilName   = [pwd filesep 'Perfil' filesep 'Xfoil' filesep ...
+               foilname '_xfoil.dat'];
+tornadoName = [pwd filesep 'Perfil' filesep 'Xfoil' filesep ...
+               foilname '_tornado.dat'];
 
 %% Funciones 'perfil' y 'ala'
 [Cl, Cd, Cm] = perfil(nPerfil, xfoilName, tornadoName, rle, xt, yt, ...
                       bte, dzte, yle, xc, yc, ate, zte, b0, b2, b8, ...
                       b15, b17, alpha, Re, Ma);
 
-%[CL, CD] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
-%               cs, fs, bs, vinf, h, alpha);
+[CL, CD, CMa] = ala(nSecciones, nPanelX, nPanelY, tornadoName, ds, ts, ...
+                    cs, fs, bs, vinf, h, alpha);
 
 %% Funcion objetivo
-alcance    = max(Cl.^(3.0/2.0)./Cd);
-eficiencia = max(Cl./Cd);
-out = -alcance - eficiencia - max(abs(Cm));
+alcanceP    = max(Cl.^(3.0/2.0)./Cd);
+alcanceA    = max(CL.^(3.0/2.0)./CD);
+eficienciaP = max(Cl./Cd);
+eficienciaA = max(CL./CD);
+
+out = - alcanceA    - alcanceP    ...
+      - eficienciaA - eficienciaP ...
+      + max(Cm)     + max(CMa);
 
 end

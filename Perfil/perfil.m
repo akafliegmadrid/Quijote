@@ -34,9 +34,4 @@ Cl = polar.CL;
 Cd = polar.CD + polar.CDp;
 Cm = polar.Cm;
 
-% DEBUG
-%Cl = 1.2;
-%Cd = 0.004;
-%Cm = -0.01;
-
 end

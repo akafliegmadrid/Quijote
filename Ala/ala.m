@@ -1,4 +1,4 @@
-function[ CL, CD ] = ala ( nSecciones, nPanelX, nPanelY, foilname, ...
+function[ CL, CD, CMa ] = ala ( nSecciones, nPanelX, nPanelY, foilname, ...
                            d_q, t_q, c_q, phi_q, b_q, vinf, h, alpha )
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,23 +93,25 @@ state.pgcorr = 0;      % Apply prandtl glauert compressibility
 
 % Mallado
 state.alpha = 0.0;  % No importa el valor aqui
-[~, ref]    = fLattice_setup2(geo, state, latticetype);
+[~, ref] = fLattice_setup2(geo, state, latticetype);
 
 % Resistencia parasita, superficie mojada y volumen
 [CD0_wing, results.Re, results.Swet, results.Vol] = zeroliftdragpred(Mach, state.ALT, geo, ref);
 
 % Calculo de CL y CD (inducida)
 % Barrido en alpha
-CL = zeros(size(alpha));
-CD = zeros(size(alpha));
+CL  = zeros(size(alpha));
+CD  = zeros(size(alpha));
+CMa = zeros(size(alpha));
 for i = 1: length(alpha)
     state.alpha    = alpha(i);
     [lattice, ref] = fLattice_setup2(geo, state, latticetype);
     results        = solver9(results, state, geo, lattice, ref);
     results        = coeff_create3(results, lattice, state, ref, geo);
     results.alpha_sweep(i) = state.alpha;	
-    CL(i) = results.CL;
-    CD(i) = results.CD; 
+    CL(i)  = results.CL;
+    CD(i)  = results.CD; 
+    CMa(i) = results.Cm_a;
 end
 
 % Calculo de la resistencia total
