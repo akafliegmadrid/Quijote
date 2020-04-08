@@ -37,9 +37,13 @@ ts = in(29:32);
 Ma = vinf / a;
 
 % Nombres de los archivos (rutas absolutas)
-xfoilName   = [pwd filesep 'Perfil' filesep 'Xfoil' filesep ...
+wd  = fileparts(which(mfilename));
+ind = strfind(wd, "/");
+ind = ind(end);
+wd  = wd(1:ind);
+xfoilName   = [wd 'Perfil' filesep 'Xfoil' filesep ...
                foilname '_xfoil.dat'];
-tornadoName = [pwd filesep 'Perfil' filesep 'Xfoil' filesep ...
+tornadoName = [wd 'Perfil' filesep 'Xfoil' filesep ...
                foilname '_tornado.dat'];
 
 %% Funciones 'perfil' y 'ala'
