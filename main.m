@@ -63,7 +63,6 @@ ts = [ -5.0  2.0  5.0;  ...  % Torsion     [deg]
 %% INPUTS DEL ALGORITMO
 
 % Conversion a radianes
-alpha = deg2rad(alpha);
 bte   = deg2rad(bte);
 yle   = deg2rad(yle);
 ate   = deg2rad(ate);
