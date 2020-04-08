@@ -164,7 +164,7 @@ else
   elseif isunix
       xfoilExe = 'xfoil';
   elseif ismac
-      xfoilExe = 'open xfoil';
+      xfoilExe = './xfoil';
   else
       error([mfilename ':system'],'Your OS must be Windows, Mac or Linux');
   end
