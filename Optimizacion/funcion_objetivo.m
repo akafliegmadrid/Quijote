@@ -60,8 +60,11 @@ alcanceA    = max(CL.^(3.0/2.0)./CD);
 eficienciaP = max(Cl./Cd);
 eficienciaA = max(CL./CD);
 
-out = - alcanceA    - alcanceP    ...
-      - eficienciaA - eficienciaP ...
-      + max(Cm)     + max(CMa);
+out = - eficienciaA   - eficienciaP ...
+      - alcanceA      - alcanceP;
+ %     + max(CMa)      + max(Cm);
+  
+  
+  
 
 end

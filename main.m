@@ -13,7 +13,7 @@ clc
 %% PARAMETROS
 
 % Parametros de la simulacion
-Vinf       = 30.0;            % Velocidad de vuelo [m/s]
+Vinf       = 30.0;            % Velocidad de vuelo [m/s] 
 Re         = 1e6;             % Numero de Reynolds del perfil
 h          = 1500;            % Altura de vuelo [m]
 alpha      = [-2.0 -1.0 0.0 1.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
@@ -21,8 +21,8 @@ nPerfil    = 200;             % Numero de paneles en el perfil
 foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
 nSecciones = 3;               % Numero de secciones del ala
-nPanelX    = 4;               % No. de paneles en la direccion de la cuerda
-nPanelY    = [10 2 3];        % No. de paneles en la direccion de la env.
+nPanelX    = 3;              % No. de paneles en la direccion de la cuerda
+nPanelY    = [10 5 3];      % No. de paneles en la direccion de la env.
 
 % Parametros del perfil BP3434 (min, inicial, max)
 rle  = [ 0.01  0.015  0.2   ];  % [c^-1]
@@ -105,6 +105,8 @@ algorithmOptions = optimoptions('fmincon',                         ...
                                 'UseParallel',   false             );
 
 %% OPTIMIZACION
+
+tic
 % Plot del perfil inicial
 figure()
 plotPerfil(nPerfil, x0);
@@ -116,9 +118,14 @@ close all
 % Optimizacion
 geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
                    @restriccionesNoLin, algorithmOptions);
+               
+toc
 
 %% PLOTS
 figure();
 plotPerfil(nPerfil, [geometry; x0])
 figure()
 plotAla(nSecciones, nPanelX, nPanelY, foilName, geometry);
+
+
+
