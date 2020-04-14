@@ -6,3 +6,4 @@ xfoil
 *.dat
 *.inp
 *.out
+*.bl

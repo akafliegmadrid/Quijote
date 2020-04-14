@@ -13,16 +13,16 @@ clc
 %% PARAMETROS
 
 % Parametros de la simulacion
-Vinf       = 30.0;            % Velocidad de vuelo [m/s] 
-Re         = 1e6;             % Numero de Reynolds del perfil
-h          = 1500;            % Altura de vuelo [m]
-alpha      = [-2.0 -1.0 0.0 1.0 2.0];  % AoA (AoA_1, AoA_2, ...) [deg]
+h          = 1500.0;          % Altura de vuelo [m]
+MTOM       = 400.0;           % Masa del avion [kg]
+Vcr        = 120.0;           % Velocidad de crucero [km/s]
+Vth        = 80.0;            % Velocidad en termica [km/s]
 nPerfil    = 200;             % Numero de paneles en el perfil
 foilName   = 'Airfoil';       % Archivo con las coordenadas del perfil
 bAla       = 20.0;            % Envergadura total en metros
 nSecciones = 3;               % Numero de secciones del ala
-nPanelX    = 3;              % No. de paneles en la direccion de la cuerda
-nPanelY    = [10 5 3];      % No. de paneles en la direccion de la env.
+nPanelX    = 3;               % No. de paneles en la direccion de la cuerda
+nPanelY    = [10 5 3];        % No. de paneles en la direccion de la env.
 
 % Parametros del perfil BP3434 (min, inicial, max)
 rle  = [ 0.01  0.015  0.2   ];  % [c^-1]
@@ -70,6 +70,10 @@ fs    = deg2rad(fs);
 ds    = deg2rad(ds);
 ts    = deg2rad(ts);
 
+% Conversion a m/s
+Vcr    = Vcr / 3.6;
+Vth    = Vth / 3.6;
+
 % Vector de estado
 x0 = [rle(2) xt(2) yt(2) bte(2) dzte(2) yle(2) xc(2) yc(2)   ...
       ate(2) zte(2) b0(2) b2(2) b8(2) b15(2) b17(2) bs(:,2)' ...
@@ -90,11 +94,15 @@ ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
 
 % Handle de la funcion objetivo
 obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
-                            nPanelY, Vinf, h, alpha, Re, x);
+                            nPanelY, h, MTOM, Vcr, Vth, x);
+
+% Handle de la funcion de restricciones no lineales
+nonLin = @(x) restriccionesNoLin(MTOM, x);
 
 % Opciones de la optimizacion
 pltPerFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0]);
-pltAlaFcn = @(x, optimValues, state) plotAla(nSecciones, nPanelX, nPanelY, foilName, x);
+pltAlaFcn = @(x, optimValues, state) plotAla(nSecciones, nPanelX,  ...
+                                             nPanelY, foilName, x);
 algorithmOptions = optimoptions('fmincon',                         ...
                                 'Algorithm',     'interior-point', ...
                                 'Display',       'notify',         ...
@@ -106,7 +114,9 @@ algorithmOptions = optimoptions('fmincon',                         ...
 
 %% OPTIMIZACION
 
+% Comienzo del cronometro
 tic
+
 % Plot del perfil inicial
 figure()
 plotPerfil(nPerfil, x0);
@@ -117,8 +127,9 @@ close all
 
 % Optimizacion
 geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
-                   @restriccionesNoLin, algorithmOptions);
-               
+                   nonLin, algorithmOptions);
+
+% Fin del cronometro
 toc
 
 %% PLOTS
@@ -126,6 +137,3 @@ figure();
 plotPerfil(nPerfil, [geometry; x0])
 figure()
 plotAla(nSecciones, nPanelX, nPanelY, foilName, geometry);
-
-
-

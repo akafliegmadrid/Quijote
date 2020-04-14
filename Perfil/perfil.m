@@ -1,7 +1,7 @@
-function [ Cl, Cd, Cm ] = perfil( npaneles, xfoilName, tornadoName,    ...
+function [ polar ] = perfil( npaneles, xfoilName, tornadoName,    ...
                                   rle, xt, yt, bte, dzte, yle, xc, yc, ...
                                   ate, zte, b0, b2, b8, b15, b17,      ...
-                                  alpha, Re, Ma )
+                                  Cl, Re, Ma )
 % PERFIL calcula las propiedades del perfil a partir de la geometria
 %   Interfaz entre Matlab y Xfoil para determinar caracteristicas
 %   aerodinamicas dada la forma del perfil
@@ -27,11 +27,6 @@ fclose(fid);
 
 % Llamada a Xfoil
 localXfoilName = xfoilName(find(xfoilName==filesep,1,'last')+1:end);
-polar = xfoil(localXfoilName, alpha, Re, Ma, '/plop/g');
-
-% Valores de salida de la funcion
-Cl = polar.CL;
-Cd = polar.CD + polar.CDp;
-Cm = polar.Cm;
+polar = xfoilCl(localXfoilName, Cl, Re, Ma, '/plop/g');
 
 end
