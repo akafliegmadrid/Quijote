@@ -6,7 +6,7 @@ clc
 %% Parametros
 % Perfil a convertir a BP3434
 filename = 'FX_77_W_258.dat';
-%filename = 'FX_S_03_182.dat';
+% filename = 'FX_S_03_182.dat';
 nPuntos  = 100;
 
 % Valores iniciales
@@ -60,13 +60,15 @@ close;
 %% Optimizacion
 % "Binding" de la funcion a optimizar
 obj       = @(x) diferencia(nPuntos, x, xfu, yfu, xfl, yfl);
-pltPerFcn = @(x, optimValues, state) plotPerfil(nPuntos, [x; x0], [], 1);
-opt = optimoptions('fmincon',                         ...
-                   'MaxIterations', 1000,             ...
-                   'PlotFcn',       {'optimplotfval', ...
-                                     pltPerFcn}       );
+pltPerFcn = @(x, optimValues, state) plotPerfil(nPuntos, [x; x0], ... 
+                                                [xf'; yf'], 2);
+opt = optimoptions('fminunc',                                  ...
+                   'MaxFunctionEvaluations', 1e4,              ...
+                   'PlotFcn',                {'optimplotfval', ...
+                                              pltPerFcn}       );
 
-bp3434params = fmincon(obj, x0, [], [], [], [], [], [], [], opt);
+% bp3434params = fmincon(obj, x0, [], [], [], [], [], [], [], opt);
+bp3434params = fminunc(obj, x0, opt);
 
 % Plot de la solucion
 figure();
