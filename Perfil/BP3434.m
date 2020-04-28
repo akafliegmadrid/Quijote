@@ -119,7 +119,7 @@ yac = [ ylc, ytc ];
 
 %% Definicion del perfil
 x  = xat;
-yu = yac + yat;
-yl = yac - yat;
+yu = yac + yat/2.0;
+yl = yac - yat/2.0;
 
 end
