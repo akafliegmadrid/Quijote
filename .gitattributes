@@ -14,3 +14,4 @@
 *.slreqx -crlf -diff -merge
 *.sfx -crlf -diff -merge
 *.sltx -crlf -diff -merge
+*.png -crlf -diff -merge

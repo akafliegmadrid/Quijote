@@ -9,11 +9,49 @@ archivos organizados
 recordando añadir todas las carpetas al `PATH`.
 
 Para que `Xfoil` funcione es necesario que el archivo `xfoil.exe` este en
-la carpeta `Perfil/Xfoil`. Si teneis Linux o Mac podeis crear un enlace
+la carpeta `Perfil/Xfoil`. Si tenéis Linux o Mac podéis crear un enlace
 al ejecutable usando los comandos siguientes desde la carpeta `Xfoil`:
 
 * Para saber donde esta el ejecutable: `type xfoil`
 * Para crear el enlace: `ln -s /direccion/de/xfoil`
+
+## Quick-start del optimizador
+
+Para iniciar la optimización es necesario especificar el perfil y el ala
+iniciales al comienzo del archivo `main.m`. También es posible cambiar otros
+parámetros, aunque con los que hay ahora mismo ya debería funcionar.
+
+![Parámetros iniciales del optimizador](./img/main_x0.png)
+
+Los valores mínimos y máximos tienen bastante importancia y, si no se eligen
+bien, es posible que el programa no consiga encontrar ninguna solución.
+
+Durante la ejecución, el programa trata de minimizar el valor de la función
+definida en `funcion_objetivo.m`. Obviamente, el resultado de todo el proceso
+depende de cómo se defina esta función, así que diferentes funciones y
+condiciones iniciales dan lugar a diferentes soluciones finales.
+
+![Función objetivo](./img/objetivo.png)
+
+## Utilidad de parametrización BP3434
+
+A pesar de que la forma inicial del perfil debe introducirse en el programa
+a través de una parametrización llamada BP3434, normalmente los perfiles están
+definidos mediante archivos de texto con las coordenadas del perfil. Para
+encontrar los valores de estos parámetros se puede usar el archivo
+`perfilBP3434.m`, siguiendo estos pasos:
+
+1. Poner el archivo con las coordenadas del perfil en `Utilidades/` (hay
+   ejemplos de archivos en la carpeta `Extra/`).
+2. Indicar en `perfilBP3434.m` el nombre del archivo con las coordenadas del
+   perfil.
+
+![Especificación del archivo de coordenadas](./img/perfil_BP3434.png)
+
+La función puede ejecutarse como un programa independiente o como una función
+que devuelve los valores BP3434 correspondientes al perfil. Las condiciones
+iniciales también pueden cambiarse, y es recomendable ajustarlas de manera que
+el perfil inicial sea similar al buscado.
 
 ## Guía para usar git
 
@@ -25,13 +63,13 @@ Normalmente, antes de empezar es bueno actualizar todo
 * `git checkout [branch donde vais a trabajar]`
 * `git pull`
 
-Una vez que hayais hecho varios cambios que esten relacionados, haced un
+Una vez que hayáis hecho varios cambios que estén relacionados, haced un
 _commit_ con un comentario que los agrupe.
 
 * `git add .`
 * `git commit -m "comentario"`
 
-Cuando esteis seguros de que esta todo bien, subid todo al servidor
+Cuando estéis seguros de que esta todo bien, subid todo al servidor
 
 * `git push`.
 
@@ -40,7 +78,7 @@ Cuando esteis seguros de que esta todo bien, subid todo al servidor
 * Actualizar archivos desde el servidor (hacer **siempre** antes de trabajar):
     - `git pull`
 
-* Seleccionar archivos a incluir en el proximo _commit_ (_staged_):
+* Seleccionar archivos a incluir en el próximo _commit_ (_staged_):
     - `git add [nombre de los archivos]`
     - `git add .` (para añadir todos los cambios)
 
