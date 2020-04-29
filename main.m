@@ -25,21 +25,21 @@ nPanelX    = 3;               % No. de paneles en la direccion de la cuerda
 nPanelY    = [10 5 3];        % No. de paneles en la direccion de la env.
 
 % Parametros del perfil BP3434 (min, inicial, max)
-rle  = [ 0.01  0.015  0.2   ];  % [c^-1]
-xt   = [ 0.25  0.3    0.35  ];  % [c^-1]
-yt   = [ 0.04  0.05   0.06  ];  % [c^-1]
-bte  = [ 0.0   2.0    5.0   ];  % [deg]
-dzte = [ 0.0   0.001  0.003 ];  % [c^-1]
-yle  = [ 0.0   15.0   20.0  ];  % [deg]
-xc   = [ 0.4   0.44   0.5   ];  % [c^-1]
-yc   = [ 0.0   0.02   0.02  ];  % [c^-1]
-ate  = [ 0.0   2.0    5.0   ];  % [deg]
-zte  = [ -0.01 -0.005 0.01  ];  % [c^-1]
-b0   = [ 0.03  0.05   0.07  ];  % [c^-1]
-b2   = [ 0.1   0.2    0.4   ];  % [c^-1]
-b8   = [ 0.02  0.04   0.06  ];  % [c^-1]
-b15  = [ 0.7   0.75   0.8   ];  % [c^-1]
-b17  = [ 0.85  0.9    0.95  ];  % [c^-1]
+rle  = [ 0.05 0.154220 0.2   ];  % [c^-1]
+xt   = [ 0.15 0.313441 0.5   ];  % [c^-1]
+yt   = [ 0.1  0.258317 0.3   ];  % [c^-1]
+bte  = [ 0.0  16.28610 25.0  ];  % [deg]
+dzte = [ 0.0  0.010206 0.015 ];  % [c^-1]
+yle  = [ 0.0  18.75216 25.0  ];  % [deg]
+xc   = [ 0.1  0.238723 0.4   ];  % [c^-1]
+yc   = [ -0.1 0.041030 0.2   ];  % [c^-1]
+ate  = [ 0.0  3.021284 20.0  ];  % [deg]
+zte  = [ -0.1 0.001621 0.1   ];  % [c^-1]
+b0   = [ 0.05 0.130598 0.2   ];  % [c^-1]
+b2   = [ 0.1  0.134234 0.3   ];  % [c^-1]
+b8   = [ 0.05 0.108945 0.2   ];  % [c^-1]
+b15  = [ 0.4  0.592340 0.7   ];  % [c^-1]
+b17  = [ 0.8  0.910983 0.97  ];  % [c^-1]
 
 % Parametros del ala (min, inicial, max)
 bs = [ 6.0  8.0  9.0; ...    % Envergadura [m]
@@ -90,7 +90,7 @@ ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
       cs(:,3)' fs(:,3)' ds(:,3)' ts(:,3)'];
 
 % Restricciones lineales
-[Aeq, beq] = restriccionesLin(bAla, x0);
+[A, b, Aeq, beq] = restriccionesLin(bAla, x0);
 
 % Handle de la funcion objetivo
 obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
@@ -124,7 +124,7 @@ pause
 close all
 
 % Optimizacion
-geometry = fmincon(obj, x0, [], [], Aeq, beq, lb, ub, ...
+geometry = fmincon(obj, x0, A, b, Aeq, beq, lb, ub, ...
                    nonLin, algorithmOptions);
 
 % Fin del cronometro

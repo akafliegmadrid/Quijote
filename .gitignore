@@ -2,7 +2,8 @@ Quijote*
 resources
 xfoil
 .DS_Store
+*.dat
 *.exe
 *.inp
 *.out
-
+*.bl
