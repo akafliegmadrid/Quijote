@@ -100,12 +100,10 @@ obj = @(x) funcion_objetivo(nPerfil, foilName, nSecciones, nPanelX, ...
 nonLin = @(x) restriccionesNoLin(MTOM, x);
 
 % Opciones de la optimizacion
-pltPerFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0]);
+pltPerFcn = @(x, optimValues, state) plotPerfil(nPerfil, [x; x0], [], 1);
 pltAlaFcn = @(x, optimValues, state) plotAla(nSecciones, nPanelX,  ...
                                              nPanelY, foilName, x);
 algorithmOptions = optimoptions('fmincon',                         ...
-                                'Algorithm',     'interior-point', ...
-                                'Display',       'notify',         ...
                                 'MaxIterations', 1000,             ...
                                 'PlotFcn',       {'optimplotfval', ...
                                                   pltPerFcn,       ...
@@ -119,7 +117,7 @@ tic
 
 % Plot del perfil inicial
 figure()
-plotPerfil(nPerfil, x0);
+plotPerfil(nPerfil, x0, [], 1);
 figure()
 plotAla(nSecciones, nPanelX, nPanelY, foilName, x0);
 pause
@@ -134,6 +132,6 @@ toc
 
 %% PLOTS
 figure();
-plotPerfil(nPerfil, [geometry; x0])
+plotPerfil(nPerfil, [geometry; x0], [], 1)
 figure()
 plotAla(nSecciones, nPanelX, nPanelY, foilName, geometry);
