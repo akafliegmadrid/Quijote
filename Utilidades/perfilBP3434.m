@@ -5,26 +5,26 @@ clc
 
 %% Parametros
 % Perfil a convertir a BP3434
-filename = 'FX_77_W_258.dat';
-% filename = 'FX_S_03_182.dat';
+% filename = 'FX_77_W_258.dat';
+filename = 'FX_S_03_182.dat';
 nPuntos  = 100;
 
 % Valores iniciales
-rle  = 0.02;  % [c^-1]
-xt   = 0.25;  % [c^-1]
-yt   = 0.26;  % [c^-1]
-bte  = 20.0;  % [deg]
-dzte = 0.01;  % [c^-1]
-yle  = 15.0;  % [deg]
-xc   = 0.4;   % [c^-1]
-yc   = 0.05;  % [c^-1]
-ate  = 5.0;   % [deg]
-zte  = 0.0;   % [c^-1]
-b0   = 0.05;  % [c^-1]
-b2   = 0.2;   % [c^-1]
-b8   = 0.04;  % [c^-1]
-b15  = 0.6;  % [c^-1]
-b17  = 0.9;   % [c^-1]
+rle  = 0.05131;  % [c^-1]
+xt   = 0.41116;  % [c^-1]
+yt   = 0.18299;  % [c^-1]
+bte  = 18.0060;  % [deg]
+dzte = -0.0000;  % [c^-1]
+yle  = 13.3625;  % [deg]
+xc   = 0.18954;  % [c^-1]
+yc   = 0.02338;  % [c^-1]
+ate  = 9.84651;  % [deg]
+zte  = 0.00204;  % [c^-1]
+b0   = 0.07870;  % [c^-1]
+b2   = 0.26218;  % [c^-1]
+b8   = 0.08931;  % [c^-1]
+b15  = 0.63893;  % [c^-1]
+b17  = 0.72057;  % [c^-1]
 
 %% Setup
 % Degrees to radians
@@ -60,8 +60,7 @@ close;
 %% Optimizacion
 % "Binding" de la funcion a optimizar
 obj       = @(x) diferencia(nPuntos, x, xfu, yfu, xfl, yfl);
-pltPerFcn = @(x, optimValues, state) plotPerfil(nPuntos, [x; x0], ... 
-                                                [xf'; yf'], 2);
+pltPerFcn = @(x, optimValues, state) plotPerfil(nPuntos, x, [xf'; yf'], 1);
 opt = optimoptions('fminunc',                                  ...
                    'MaxFunctionEvaluations', 1e4,              ...
                    'PlotFcn',                {'optimplotfval', ...
@@ -74,6 +73,14 @@ bp3434params = fminunc(obj, x0, opt);
 figure();
 plotPerfil(nPuntos, bp3434params, [xf'; yf'], 1);
 legend('Perfil solucion', 'Perfil objetivo');
+
+% Angulos a grados
+bp3434params(4) = rad2deg(bp3434params(4));
+bp3434params(6) = rad2deg(bp3434params(6));
+bp3434params(9) = rad2deg(bp3434params(9));
+
+% Solucion lista para copiar
+printSolution(bp3434params);
 
 end
 
@@ -112,5 +119,25 @@ try
 catch
     dy = 10.0;  % Deberia ser suficientemente grande...
 end
+
+end
+
+function [] = printSolution(x)
+
+fprintf('rle  = %f;  %% [c^-1]\n', x(1));
+fprintf('xt   = %f;  %% [c^-1]\n', x(2));
+fprintf('yt   = %f;  %% [c^-1]\n', x(3));
+fprintf('bte  = %f;  %% [deg]\n',  x(4));
+fprintf('dzte = %f;  %% [c^-1]\n', x(5));
+fprintf('yle  = %f;  %% [deg]\n',  x(6));
+fprintf('xc   = %f;  %% [c^-1]\n', x(7));
+fprintf('yc   = %f;  %% [c^-1]\n', x(8));
+fprintf('ate  = %f;  %% [deg]\n',  x(9));
+fprintf('zte  = %f;  %% [c^-1]\n', x(10));
+fprintf('b0   = %f;  %% [c^-1]\n', x(11));
+fprintf('b2   = %f;  %% [c^-1]\n', x(12));
+fprintf('b8   = %f;  %% [c^-1]\n', x(13));
+fprintf('b15  = %f;  %% [c^-1]\n', x(14));
+fprintf('b17  = %f;  %% [c^-1]\n', x(15));
 
 end

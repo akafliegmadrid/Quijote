@@ -43,7 +43,7 @@ if size(inBP3434,1) ~= 0
     % El primer perfil se dibuja en linea continua si 'bold==1'
     hold off
     if bold == 1
-        plot(x(1,:), y(1,:))
+        plot(x(1,:), y(1,:), 'linewidth', 1)
         hold on;
         init = 2;
     else
@@ -63,7 +63,7 @@ if size(inPts,1) ~= 0
 
     % El primero en linea continua si 'bold==2'
     if bold == 2
-        plot(inPts(1,:), inPts(2,:))
+        plot(inPts(1,:), inPts(2,:), 'linewidth', 1)
         hold on
         init = 2;
     else
