@@ -1,6 +1,12 @@
 # Quijote
 Scripts para el diseño del MAD-1 "Rocinante"
 
+## Tareas pendientes
+
+* Parametrizar posbiles condiciones iniciales
+* Ajustar límites de los parámetros
+* Obtener perfil final para ajustar manualmente
+
 ## Setup
 
 Es recomendable crear un proyecto de Matlab para mantener todos los
@@ -37,8 +43,17 @@ condiciones iniciales dan lugar a diferentes soluciones finales.
 
 A pesar de que la forma inicial del perfil debe introducirse en el programa
 a través de una parametrización llamada BP3434, normalmente los perfiles están
-definidos mediante archivos de texto con las coordenadas del perfil. Para
-encontrar los valores de estos parámetros se puede usar el archivo
+definidos mediante archivos de texto con las coordenadas del perfil. Esta
+parametrización se ha escogido por simplificar el proceso de optimización de
+perfiles sin limitar en exceso la precisión, y sigue la formulación descrita en
+[Derksen, R. W., & Rogalsky, T. (2010). Bezier-PARSEC: An optimized aerofoil
+parameterization for design](https://doi.org/10.1016/j.advengsoft.2010.05.002),
+donde los perfiles se describen mediante los 15 parámetros de la siguiente
+imagen:
+
+![Parametrización BP3434](./Extra/BP3434_schematic.png)
+
+Para encontrar los valores de estos parámetros se puede usar el archivo
 `perfilBP3434.m`, siguiendo estos pasos:
 
 1. Poner el archivo con las coordenadas del perfil en `Utilidades/` (hay

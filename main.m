@@ -13,7 +13,7 @@ clc
 %% PARAMETROS
 
 % Parametros de la simulacion
-h          = 1500.0;          % Altura de vuelo [m]
+h          = 1000.0;          % Altura de vuelo [m]
 MTOM       = 400.0;           % Masa del avion [kg]
 Vcr        = 120.0;           % Velocidad de crucero [km/s]
 Vth        = 80.0;            % Velocidad en termica [km/s]
@@ -75,19 +75,19 @@ Vcr    = Vcr / 3.6;
 Vth    = Vth / 3.6;
 
 % Vector de estado
-x0 = [rle(2) xt(2) yt(2) bte(2) dzte(2) yle(2) xc(2) yc(2)   ...
-      ate(2) zte(2) b0(2) b2(2) b8(2) b15(2) b17(2) bs(:,2)' ...
-      cs(:,2)' fs(:,2)' ds(:,2)' ts(:,2)'];
+x0 = [rle(2) xt(2) yt(2) bte(2) dzte(2) yle(2) xc(2) yc(2)   ...  % Perfil
+      ate(2) zte(2) b0(2) b2(2) b8(2) b15(2) b17(2)          ...  % Perfil
+      bs(:,2)' cs(:,2)' fs(:,2)' ds(:,2)' ts(:,2)'];              % Ala
 
 % Limites inferiores
-lb = [rle(1) xt(1) yt(1) bte(1) dzte(1) yle(1) xc(1) yc(1)   ...
-      ate(1) zte(1) b0(1) b2(1) b8(1) b15(1) b17(1) bs(:,1)' ...
-      cs(:,1)' fs(:,1)' ds(:,1)' ts(:,1)'];
+lb = [rle(1) xt(1) yt(1) bte(1) dzte(1) yle(1) xc(1) yc(1)   ...  % Perfil
+      ate(1) zte(1) b0(1) b2(1) b8(1) b15(1) b17(1)          ...  % Perfil
+      bs(:,1)' cs(:,1)' fs(:,1)' ds(:,1)' ts(:,1)'];              % Ala
 
 % Limites superiores
-ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...
-      ate(3) zte(3) b0(3) b2(3) b8(3) b15(3) b17(3) bs(:,3)' ...
-      cs(:,3)' fs(:,3)' ds(:,3)' ts(:,3)'];
+ub = [rle(3) xt(3) yt(3) bte(3) dzte(3) yle(3) xc(3) yc(3)   ...  % Perfil
+      ate(3) zte(3) b0(3) b2(3) b8(3) b15(3) b17(3)          ...  % Perfil
+      bs(:,3)' cs(:,3)' fs(:,3)' ds(:,3)' ts(:,3)'];              % Ala
 
 % Restricciones lineales
 [A, b, Aeq, beq] = restriccionesLin(bAla, x0);
