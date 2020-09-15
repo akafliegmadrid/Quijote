@@ -1,5 +1,5 @@
 function[ results ] = ala ( nSecciones, nPanelX, nPanelY, foilname, ...
-                           d_q, t_q, c_q, phi_q, b_q, vinf, h, CL, alpha0 )
+                           d_q, t_q, c_q, phi_q, b_q, vinf, h, CL )
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ALA calcula las propiedades del ala a partir de la geometria
@@ -19,7 +19,6 @@ function[ results ] = ala ( nSecciones, nPanelX, nPanelY, foilname, ...
 % vinf   -> velocidad de vuelo en m/s
 % h      -> altitud de vuelo en m
 % CL     -> CL requerido
-% alpha0 -> AoA inicial para la iteracion en CL, en grados
 
 % NOTA: para evitar confusiones, el 1 siempre hara referencia al encastre o
 % al primer quiebro. si el ala tiene 3 quiebros, el c_q(1) sera la cuerda
@@ -93,7 +92,7 @@ state.pgcorr = 0;      % Apply prandtl glauert compressibility
 % Calculo de la eficiencia maxima
 
 % Mallado
-state.alpha = deg2rad(alpha0);
+state.alpha = 0.0;
 [~, state.alpha]  = fFindAlphaAtCL(geo, state, latticetype, CL);
 [~, ref]    = fLattice_setup2(geo, state, latticetype);
 

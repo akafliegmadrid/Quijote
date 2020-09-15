@@ -10,11 +10,20 @@ function [ stop ] = plotAla( nSecciones, nPanelX, nPanelY, foilname, in )
 stop = false;
 
 %% Se extraen las variables del ala
-b_q   = in(16:18);
-c_q   = in(19:22);
-phi_q = in(23:25);
-d_q   = in(26:28);
-t_q   = in(29:32);
+if length(in) == 17
+    b_q   = in(1:3);
+    c_q   = in(4:7);
+    phi_q = in(8:10);
+    d_q   = in(11:13);
+    t_q   = in(14:17);
+
+elseif length(in) > 17
+    b_q   = in(16:18);
+    c_q   = in(19:22);
+    phi_q = in(23:25);
+    d_q   = in(26:28);
+    t_q   = in(29:32);
+end
 
 %% Parametros del ala y malla
 % Archivo del perfil

@@ -14,19 +14,26 @@ function [ polar ] = perfil( npaneles, xfoilName, tornadoName,    ...
                      ate, zte, b0, b2, b8, b15, b17);
 
 % Se escribe el archivo del perfil para Xfoil
-fid = fopen(xfoilName, 'w');
-fprintf(fid, '%9.5f  %9.5f\n', [fliplr(x) x(2:end); fliplr(yl) yu(2:end)]);
-fclose(fid);
+polar = [];
+if ~isempty(xfoilName)
+    
+    fid = fopen(xfoilName, 'w');
+    fprintf(fid, '%9.5f  %9.5f\n', [fliplr(x) x(2:end); fliplr(yl) yu(2:end)]);
+    fclose(fid);
+
+    % Llamada a Xfoil
+    localXfoilName = xfoilName(find(xfoilName==filesep,1,'last')+1:end);
+    polar = xfoilCl(localXfoilName, Cl, Re, Ma, '/plop/g');
+
+end
 
 % Se escribe el archivo del perfil para Tornado
-fid = fopen(tornadoName, 'w');
-fprintf(fid, '%9.5f  %9.5f\n', length(yu), length(yl));
-fprintf(fid, '%9.5f  %9.5f\n', [x; yu]);
-fprintf(fid, '%9.5f  %9.5f\n', [x; yl]);
-fclose(fid);
-
-% Llamada a Xfoil
-localXfoilName = xfoilName(find(xfoilName==filesep,1,'last')+1:end);
-polar = xfoilCl(localXfoilName, Cl, Re, Ma, '/plop/g');
+if ~isempty(tornadoName)
+    fid = fopen(tornadoName, 'w');
+    fprintf(fid, '%9.5f  %9.5f\n', length(yu), length(yl));
+    fprintf(fid, '%9.5f  %9.5f\n', [x; yu]);
+    fprintf(fid, '%9.5f  %9.5f\n', [x; yl]);
+    fclose(fid);
+end
 
 end
