@@ -45,15 +45,18 @@ if size(inBP3434,1) ~= 0
     if bold == 1
         plot(x(1,:), y(1,:), 'linewidth', 1)
         hold on;
-        init = 2;
+        % Todos los demas, en linea discontinua
+        for i = 2: length(rle)
+            plot(x(i,:), y(i,:), '-.')
+            hold on
+        end
     else
-        init = 1;
-    end
-    
-    % Todos los demas, en linea discontinua
-    for i = init: length(rle)
-        plot(x(i,:), y(i,:), '-.')
-        hold on
+        % Todos en linea continua
+        hold off
+        for i = 1: length(rle)
+            plot(x(i,:), y(i,:), 'linewidth', 1)
+            hold on
+        end
     end
 
 end
@@ -65,15 +68,17 @@ if size(inPts,1) ~= 0
     if bold == 2
         plot(inPts(1,:), inPts(2,:), 'linewidth', 1)
         hold on
-        init = 2;
+        % Los demas, en linea discontinua
+        for i = init: size(inPts,1)/2
+            plot(inPts(2*i-1,:), inPts(2*i,:), '-.')
+            hold on
+        end
     else
-        init = 1;
-    end
-    
-    % Los demas, en linea discontinua
-    for i = init: size(inPts,1)/2
-        plot(inPts(2*i-1,:), inPts(2*i,:), '-.')
-        hold on
+        % Todos en linea continua
+        for i = 1: size(inPts,1)/2
+            plot(inPts(2*i-1,:), inPts(2*i,:), 'linewidth', 1)
+            hold on
+        end
     end
 
 end
